@@ -4,12 +4,12 @@ services:
     env: node
     plan: free
     buildCommand: "cd backend && npm install"
-    startCommand: "cd backend && npm start"
+    startCommand: "cd backend && node server.js"
     envVars:
       - key: SENDGRID_API_KEY
         sync: false
       - key: CONTACT_EMAIL
-        value: "syllfarney@hotmail.com"
+        sync: false
 
   - type: static
     name: viveiro-comurg-frontend
