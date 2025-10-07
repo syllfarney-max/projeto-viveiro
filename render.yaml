@@ -10,11 +10,6 @@ services:
         sync: false
       - key: CONTACT_EMAIL
         sync: false
-
-  - type: static
-    name: viveiro-comurg-frontend
-    buildCommand: "cd frontend && npm install && npm run build"
-    publishPath: frontend/dist
-    envVars:
       - key: VITE_API_URL
         value: "https://viveiro-comurg-backend.onrender.com"
+
