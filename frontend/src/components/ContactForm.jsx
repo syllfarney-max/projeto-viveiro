@@ -12,16 +12,19 @@ export default function ContactForm() {
     };
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}/send`, {
+      const res = await fetch("https://viveiro-comurg-backend-yjsj.onrender.com/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       const result = await res.json();
-      if (result.success) setStatus("✅ Mensagem enviada com sucesso!");
-      else setStatus("❌ Erro ao enviar mensagem.");
-    } catch {
+      if (result.success) {
+        setStatus("✅ Mensagem enviada com sucesso!");
+      } else {
+        setStatus("❌ Erro ao enviar mensagem.");
+      }
+    } catch (err) {
       setStatus("❌ Erro de conexão com servidor.");
     }
   };
