@@ -1,11 +1,10 @@
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import sgMail from "@sendgrid/mail";
+import dotenv from "dotenv";
 
-// server.js (CommonJS)
-const express = require("express");
-const cors = require("cors");
-const bodyParser = require("body-parser");
-const sgMail = require("@sendgrid/mail");
-require("dotenv").config();
-
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 10000;
 
@@ -14,6 +13,7 @@ app.use(bodyParser.json());
 
 sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
 
+// Endpoint de DEBUG
 app.get("/debug", (req, res) => {
   res.json({
     contactEmail: process.env.CONTACT_EMAIL || null,
@@ -21,7 +21,8 @@ app.get("/debug", (req, res) => {
   });
 });
 
-app.post("/send", async (req, res) => {
+// Handler único
+async function sendHandler(req, res) {
   const { name, email, message } = req.body;
   if (!name || !email || !message) {
     return res.status(400).json({ success: false, error: "Campos obrigatórios faltando." });
@@ -42,7 +43,9 @@ app.post("/send", async (req, res) => {
     console.error("Erro SendGrid:", err.response?.body ?? err);
     return res.status(500).json({ success: false, error: "Erro ao enviar mensagem." });
   }
-});
+}
+
+app.post("/send", sendHandler);
 
 app.get("/", (req, res) => res.send("✅ Backend do Viveiro Comurg rodando!"));
 
