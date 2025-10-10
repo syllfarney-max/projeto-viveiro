@@ -1,0 +1,9 @@
+.page{font-family:Inter,system-ui,Arial; margin:0; background:#f6f9f4; color:#08341a}
+.site-header{background:linear-gradient(180deg,#2f7a4a,#1f5c39);color:#fff;padding:28px 16px;text-align:center}
+.site-header .logo{width:64px;height:64px;border-radius:8px;display:block;margin:0 auto 8px}
+.container{max-width:980px;margin:28px auto;padding:0 16px}
+.hero{background:#fff;border-radius:10px;padding:20px;box-shadow:0 6px 18px rgba(47,122,74,0.08)}
+.contact{margin-top:18px;background:#fff;padding:16px;border-radius:8px;box-shadow:0 6px 12px rgba(0,0,0,0.04)}
+.site-footer{padding:20px;text-align:center;color:#234a34;background:#fff;margin-top:30px}
+input,textarea{width:100%;padding:10px;margin-top:8px;border-radius:6px;border:1px solid #e6efe6}
+button{background:#2f7a4a;color:white;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;margin-top:10px}
