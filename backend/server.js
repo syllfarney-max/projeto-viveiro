@@ -1,47 +1,40 @@
-const express = require('express');
-const cors = require('cors');
-const bodyParser = require('body-parser');
-require('dotenv').config();
-const sgMail = require('@sendgrid/mail');
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
+const PORT = process.env.PORT || 10000;
+
 app.use(cors());
 app.use(bodyParser.json());
 
-if (process.env.SENDGRID_API_KEY) {
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-  console.log('SendGrid API key detected.');
-} else {
-  console.log('Warning: SENDGRID_API_KEY not set. Email sending will be disabled.');
-}
+const messages = [];
 
-app.get('/', (req, res) => res.json({ status: 'ok' }));
-
-app.post('/send', async (req, res) => {
-  const { name, email, message } = req.body || {};
-  if (!name || !email || !message) return res.status(400).json({ success: false, error: 'Campos obrigatórios faltando.' });
-
-  if (!process.env.SENDGRID_API_KEY || !process.env.CONTACT_EMAIL) {
-    console.log('Simulação: recebida mensagem', { name, email, message });
-    return res.json({ success: true, message: 'Mensagem recebida pelo backend (simulação).' });
+// Envio de mensagem
+app.post("/send", (req, res) => {
+  const { name, email, message } = req.body;
+  if (!name || !email || !message) {
+    return res.status(400).json({ success: false, error: "Campos obrigatórios faltando." });
   }
-
-  const msg = {
-    to: process.env.CONTACT_EMAIL,
-    from: process.env.CONTACT_EMAIL,
-    subject: `Mensagem do site - ${name}`,
-    text: `Nome: ${name}\nEmail: ${email}\n\n${message}`,
-    replyTo: email,
-  };
-
-  try {
-    await sgMail.send(msg);
-    return res.json({ success: true, message: 'Mensagem enviada com sucesso!' });
-  } catch (err) {
-    console.error('Erro SendGrid:', err && err.response ? err.response.body : err);
-    return res.status(500).json({ success: false, error: 'Erro ao enviar mensagem.' });
-  }
+  const newMessage = { id: messages.length + 1, name, email, message, date: new Date() };
+  messages.push(newMessage);
+  return res.json({ success: true, message: "Mensagem recebida pelo backend (simulação)." });
 });
 
-const PORT = process.env.PORT || 10000;
+// Visualizar mensagens
+app.get("/messages", (req, res) => res.json(messages));
+
+// Login simples do admin
+app.post("/admin/login", (req, res) => {
+  const { user, pass } = req.body;
+  if (user === "admin" && pass === "1234") {
+    return res.json({ success: true });
+  }
+  res.status(401).json({ success: false, error: "Credenciais inválidas." });
+});
+
+app.get("/", (req, res) => res.send("✅ Backend do Viveiro Comurg rodando!"));
+
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
