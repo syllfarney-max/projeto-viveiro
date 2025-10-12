@@ -1,0 +1,30 @@
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+const fs = require('fs');
+const path = require('path');
+dotenv.config();
+const app = express();
+app.use(cors());
+app.use(bodyParser.json());
+const JWT_SECRET = process.env.JWT_SECRET || 'change_this_secret';
+const PORT = process.env.PORT || 10000;
+const sqlite3 = require('sqlite3').verbose();
+const DBPATH = path.join(__dirname, 'data.db');
+const db = new sqlite3.Database(DBPATH);
+const initSql = fs.readFileSync(path.join(__dirname,'init.sql'),'utf8');
+db.exec(initSql);
+function generateToken(user){ return jwt.sign({id:user.id,email:user.email,role:user.role}, JWT_SECRET, {expiresIn:'8h'}); }
+function authMiddleware(req,res,next){ const h=req.headers.authorization; if(!h) return res.status(401).json({error:'No token'}); const token=h.split(' ')[1]; try{ req.user=jwt.verify(token,JWT_SECRET); next(); }catch(e){ return res.status(401).json({error:'Invalid token'}); } }
+app.get('/',(req,res)=>res.send('Viveiro Comurg backend'));
+app.post('/api/auth/register', async (req,res)=>{ const {name,email,password,role}=req.body; if(!name||!email||!password) return res.status(400).json({error:'Missing'}); const hashed=await bcrypt.hash(password,10); db.run('INSERT INTO users(name,email,password_hash,role,created_at) VALUES(?,?,?,?,datetime("now"))',[name,email,hashed,role||'viewer'],function(err){ if(err) return res.status(500).json({error:err.message}); const user={id:this.lastID,name,email,role:role||'viewer'}; res.json({success:true,user,token:generateToken(user)}); });});
+app.post('/api/auth/login',(req,res)=>{ const {email,password}=req.body; if(!email||!password) return res.status(400).json({error:'Missing'}); db.get('SELECT id,name,email,password_hash,role FROM users WHERE email=?',[email],async (err,row)=>{ if(err) return res.status(500).json({error:'DB'}); if(!row) return res.status(401).json({error:'Invalid'}); const ok=await bcrypt.compare(password,row.password_hash); if(!ok) return res.status(401).json({error:'Invalid'}); const user={id:row.id,name:row.name,email:row.email,role:row.role}; res.json({success:true,user,token:generateToken(user)}); });});
+app.post('/api/send',(req,res)=>{ const {name,email,message}=req.body; if(!name||!email||!message) return res.status(400).json({error:'Missing'}); db.run('INSERT INTO messages(name,email,message,created_at) VALUES(?,?,?,datetime("now"))',[name,email,message], function(err){ if(err) return res.status(500).json({error:err.message}); res.json({success:true,message:'Mensagem recebida e salva.'}); });});
+app.get('/api/messages', authMiddleware, (req,res)=>{ if(!['admin','manager'].includes(req.user.role)) return res.status(403).json({error:'Forbidden'}); db.all('SELECT id,name,email,message,created_at FROM messages ORDER BY created_at DESC LIMIT 500',[],(err,rows)=>{ if(err) return res.status(500).json({error:err.message}); res.json({success:true,messages:rows}); });});
+app.post('/api/nurseries', authMiddleware, (req,res)=>{ if(!['admin','manager'].includes(req.user.role)) return res.status(403).json({error:'Forbidden'}); const {name,slug,address,contact_email,contact_phone,description}=req.body; db.run('INSERT INTO nurseries(name,slug,address,contact_email,contact_phone,description,created_at) VALUES(?,?,?,?,?,?,datetime("now"))',[name,slug,address,contact_email,contact_phone,description], function(err){ if(err) return res.status(500).json({error:err.message}); res.json({success:true,id:this.lastID}); });});
+app.get('/api/nurseries', authMiddleware, (req,res)=>{ db.all('SELECT id,name,slug,address,contact_email,contact_phone,description,created_at FROM nurseries ORDER BY name',[],(err,rows)=>{ if(err) return res.status(500).json({error:err.message}); res.json({success:true,nurseries:rows}); });});
+app.get('/api/debug',(req,res)=>res.json({ok:true,env:{NODE_ENV:process.env.NODE_ENV||'dev'}}));
+app.listen(PORT,()=>console.log('Backend listening on',PORT));
