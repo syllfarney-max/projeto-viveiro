@@ -1,0 +1,5 @@
+body { font-family: Arial, sans-serif; margin:0; background:#f6f9f4; color:#1f5c39; }
+.site-header { background:#fff; padding:20px; position:relative; border-bottom:1px solid #eee; }
+.logo { width:64px; height:auto; margin-right:10px; vertical-align:middle; }
+.btn-whatsapp { background:#25d366; color:white; padding:8px 10px; border-radius:6px; text-decoration:none; margin-right:6px; }
+.btn-login { background:#1f5c39; color:white; padding:8px 10px; border-radius:6px; text-decoration:none; }
