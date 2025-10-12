@@ -1,8 +1,0 @@
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f6f9f4; color: #1f5c39; text-align: center; }
-.site-header { background: #2f7a4a; color: white; padding: 20px; }
-.logo { width: 80px; height: auto; margin-bottom: 10px; }
-.btn-whatsapp, .btn-login { margin: 5px; padding: 8px 14px; border-radius: 6px; text-decoration: none; color: white; }
-.btn-whatsapp { background: #25d366; }
-.btn-login { background: #1f5c39; }
-.form input, .form textarea { width: 90%; margin: 5px 0; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-button { background: #2f7a4a; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; }
