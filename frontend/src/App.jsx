@@ -1,16 +1,22 @@
 import React from "react";
 import ContactForm from "./components/ContactForm";
-import logo from "/comurg.jpg"; // <-- Importa o logo de forma segura (funciona no Vite e no Render)
 
 export default function App() {
+  // Caminho absoluto com fallback (funciona no Vite + Render)
+  const logoPath = `${import.meta.env.BASE_URL || ""}comurg.jpg`;
+
   return (
     <div className="page text-center">
       <header className="site-header">
         {/* Logo da Comurg acima do título */}
         <img
-          src={logo}
+          src={logoPath}
           alt="Logo Comurg"
           className="mx-auto mb-2 w-16 h-auto opacity-90"
+          onError={(e) => {
+            // Fallback caso o Render não resolva o caminho
+            e.target.src = "/comurg.jpg";
+          }}
         />
         <h1>Viveiros ® Comurg</h1>
         <p className="tagline">Sustentabilidade e Meio Ambiente</p>
