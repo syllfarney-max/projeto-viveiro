@@ -12,30 +12,28 @@ export default function ContactForm() {
     };
 
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL || "https://viveiro-comurg-backend-yjsj.onrender.com"}/send`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
       const result = await res.json();
-      if (result.success) {
-        setStatus("✅ Mensagem enviada com sucesso!");
-      } else {
-        setStatus("❌ Erro ao enviar mensagem.");
-      }
-    } catch (err) {
-      setStatus("⚠️ Erro de conexão com servidor.");
+      if (result.success) setStatus("✅ Mensagem enviada com sucesso!");
+      else setStatus("❌ Erro ao enviar mensagem.");
+    } catch {
+      setStatus("❌ Erro de conexão com o servidor.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input type="text" name="name" placeholder="Seu nome" required className="border p-2 w-full" />
-      <input type="email" name="email" placeholder="Seu email" required className="border p-2 w-full" />
-      <textarea name="message" placeholder="Sua mensagem" required className="border p-2 w-full" />
-      <button type="submit" className="bg-green-700 text-white px-4 py-2 rounded">Enviar</button>
+    <form onSubmit={handleSubmit} className="contact-form">
+      <input type="text" name="name" placeholder="Seu nome" required />
+      <input type="email" name="email" placeholder="Seu email" required />
+      <textarea name="message" placeholder="Sua mensagem" required />
+      <button type="submit">Enviar</button>
       {status && <p>{status}</p>}
     </form>
   );
 }
+
