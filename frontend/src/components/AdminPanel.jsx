@@ -1,25 +1,24 @@
 import { useEffect, useState } from "react";
 
-export default function AdminPanel() {
+export default function AdminPage() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    fetch("https://viveiro-comurg-backend-yjsj.onrender.com/messages")
-      .then((res) => res.json())
+    fetch(`${import.meta.env.VITE_API_URL}/messages`)
+      .then(res => res.json())
       .then(setMessages)
       .catch(() => setMessages([]));
   }, []);
 
   return (
-    <div className="admin-panel">
+    <div className="admin">
       <h2>Mensagens Recebidas</h2>
-      {messages.length === 0 ? (
-        <p>Nenhum dado disponível.</p>
-      ) : (
+      {messages.length === 0 ? <p>Nenhuma mensagem disponível.</p> : (
         <ul>
-          {messages.map((msg) => (
-            <li key={msg.id}>
-              <strong>{msg.name}</strong> ({msg.email}): {msg.message}
+          {messages.map((m, i) => (
+            <li key={i}>
+              <strong>{m.name}</strong> ({m.email}) — {new Date(m.date).toLocaleString()}
+              <p>{m.message}</p>
             </li>
           ))}
         </ul>
