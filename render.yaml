@@ -2,6 +2,7 @@ services:
   - type: web
     name: viveiro-comurg-backend
     env: node
+    plan: free
     rootDir: backend
     buildCommand: "npm install"
     startCommand: "npm start"
@@ -11,10 +12,8 @@ services:
       - key: CONTACT_EMAIL
         sync: false
 
-  - type: web
+  - type: static
     name: viveiro-comurg-frontend
-    env: static
-    rootDir: frontend
     buildCommand: "npm install && npm run build"
     publishPath: frontend/dist
     envVars:
