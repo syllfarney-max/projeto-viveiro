@@ -1,6 +1,6 @@
-import React from "react";
-import Header from "./components/Header";
-import ContactForm from "./components/ContactForm";
+import React from 'react';
+import ContactForm from './components/ContactForm';
+import Header from './components/Header';
 
 export default function App() {
   return (
@@ -17,10 +17,9 @@ export default function App() {
         </section>
       </main>
       <footer className="site-footer">
-        © {new Date().getFullYear()} Viveiros ® Comurg — contato:{" "}
+        © {new Date().getFullYear()} Viveiros ® Comurg — contato: 
         <a href="mailto:syllfarney@hotmail.com">syllfarney@hotmail.com</a>
       </footer>
     </div>
   );
 }
-
