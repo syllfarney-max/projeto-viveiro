@@ -1,56 +1,52 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ContactForm from "./components/ContactForm";
-import Admin from "./pages/Admin";
+import AdminLogin from "./components/AdminLogin";
+import AdminPanel from "./components/AdminPanel";
 
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div className="page">
-              <header className="site-header">
-                <img src="/comurg.jpg" alt="Comurg logo" className="logo" />
-                <h1>Viveiros ® Comurg</h1>
-                <p className="tagline">Sustentabilidade e Meio Ambiente</p>
-              </header>
+      <header className="site-header">
+        <img src="/comurg.jpg" alt="Comurg logo" className="logo" />
+        <h1>Viveiros ® Comurg</h1>
+        <p className="tagline">Sustentabilidade e Meio Ambiente</p>
 
-              <main className="container">
+        <nav className="flex gap-4">
+          <Link to="/">Início</Link>
+          <Link to="/admin">Área Administrativa</Link>
+        </nav>
+      </header>
+
+      <main className="container">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <>
                 <section className="hero">
                   <h2>Produção de mudas e soluções ambientais</h2>
-                  <p>Mudas para paisagismo, recuperação ambiental e projetos de reflorestamento.</p>
+                  <p>
+                    Mudas para paisagismo, recuperação ambiental e projetos de
+                    reflorestamento.
+                  </p>
                 </section>
-
                 <section className="contact">
                   <h3>Fale conosco</h3>
                   <ContactForm />
                 </section>
+              </>
+            }
+          />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/panel" element={<AdminPanel />} />
+        </Routes>
+      </main>
 
-                <div className="mt-4 flex justify-center gap-3">
-                  <a
-                    href="https://wa.me/5562999569870?text=Olá%20Quero%20mais%20informações"
-                    target="_blank"
-                    rel="noreferrer"
-                    className="bg-green-700 text-white px-3 py-2 rounded"
-                  >
-                    WhatsApp
-                  </a>
-                  <a href="/admin" className="bg-white text-green-800 px-3 py-2 rounded border">
-                    Área Administrativa
-                  </a>
-                </div>
-              </main>
-
-              <footer className="site-footer">
-                © {new Date().getFullYear()} Viveiros ® Comurg — contato:{" "}
-                <a href="mailto:syllfarney@hotmail.com">syllfarney@hotmail.com</a>
-              </footer>
-            </div>
-          }
-        />
-        <Route path="/admin" element={<Admin />} />
-      </Routes>
+      <footer className="site-footer">
+        © {new Date().getFullYear()} Viveiros ® Comurg — contato:{" "}
+        <a href="mailto:syllfarney@hotmail.com">syllfarney@hotmail.com</a>
+      </footer>
     </Router>
   );
 }
