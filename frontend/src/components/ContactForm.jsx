@@ -3,7 +3,7 @@ import React, { useState } from "react";
 export default function ContactForm() {
   const [status, setStatus] = useState("");
   // prefer env variable; fallback para seu backend público
-  const API_BASE = (import.meta.env.VITE_API_URL) || "https://viveiro-comurg-backend-yjsj.onrender.com";
+  const API_BASE = "https://viveiro-comurg-backend-yjsj.onrender.com";
 
   async function handleSubmit(e) {
     e.preventDefault();
