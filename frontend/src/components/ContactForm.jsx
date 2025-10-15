@@ -18,9 +18,10 @@ export default function ContactForm() {
         body: JSON.stringify(data),
       });
       const result = await res.json();
-      setStatus(result.success ? "✅ Mensagem enviada com sucesso!" : "❌ Erro ao enviar mensagem.");
-    } catch {
-      setStatus("❌ Erro de conexão com o servidor.");
+      setStatus(result.message || "✅ Mensagem enviada!");
+    } catch (error) {
+      console.error(error);
+      setStatus("⚠️ Erro de conexão com o servidor.");
     }
   };
 
@@ -30,7 +31,7 @@ export default function ContactForm() {
       <input type="email" name="email" placeholder="Seu email" required className="border p-2 w-full" />
       <textarea name="message" placeholder="Sua mensagem" required className="border p-2 w-full" />
       <button type="submit" className="bg-green-700 text-white px-4 py-2 rounded">Enviar</button>
-      {status && <p>{status}</p>}
+      {status && <p className="text-green-800 mt-2">{status}</p>}
     </form>
   );
 }
