@@ -1,49 +1,41 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 export default function ContactForm() {
-  const [status, setStatus] = useState("");
-  // prefer env variable; fallback para seu backend público
-  const API_BASE = "https://viveiro-comurg-backend-yjsj.onrender.com";
+  const [status, setStatus] = useState(null);
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("Enviando...");
-    const payload = {
+    const data = {
       name: e.target.name.value,
       email: e.target.email.value,
-      message: e.target.message.value
+      message: e.target.message.value,
     };
 
     try {
-      const res = await fetch(`${API_BASE}/send`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
+        body: JSON.stringify(data),
       });
 
-      if (!res.ok) {
-        const txt = await res.text().catch(()=>null);
-        console.error("Resposta não ok:", res.status, txt);
-        setStatus("❌ Erro ao enviar mensagem (ver console).");
-        return;
+      const result = await res.json();
+      if (result.success) {
+        setStatus("✅ Mensagem enviada com sucesso!");
+      } else {
+        setStatus("❌ Erro ao enviar mensagem.");
       }
-
-      const data = await res.json().catch(()=>null);
-      setStatus(data?.message || "✅ Mensagem enviada com sucesso!");
-      e.target.reset();
     } catch (err) {
-      console.error("Fetch erro:", err);
       setStatus("⚠️ Erro de conexão com o servidor.");
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="contact-form">
+    <form onSubmit={handleSubmit} className="form">
       <input type="text" name="name" placeholder="Seu nome" required />
       <input type="email" name="email" placeholder="Seu email" required />
       <textarea name="message" placeholder="Sua mensagem" required />
       <button type="submit">Enviar</button>
-      {status && <p className="status">{status}</p>}
+      {status && <p>{status}</p>}
     </form>
   );
 }
