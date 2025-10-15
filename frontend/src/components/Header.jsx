@@ -1,7 +1,12 @@
 export default function Header() {
   return (
     <header className="flex flex-col items-center bg-green-900 text-white py-4">
-      <img src="/comurg.jpg" alt="Logo Comurg" className="w-14 h-14 mb-2 rounded-full" />
+      <img
+        src="/comurg.jpg"
+        alt="Logo Comurg"
+        className="w-14 h-14 mb-2 object-contain rounded-full"
+        onError={(e) => (e.target.style.display = "none")}
+      />
       <h1 className="text-2xl font-bold">Viveiros ® Comurg</h1>
       <p>Sustentabilidade e Meio Ambiente</p>
       <a
