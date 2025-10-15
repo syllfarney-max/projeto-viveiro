@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export default function ContactForm() {
-  const [status, setStatus] = useState(null);
+  const [status, setStatus] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -18,20 +18,20 @@ export default function ContactForm() {
         body: JSON.stringify(data),
       });
       const result = await res.json();
-      if (result.success) setStatus("✅ Mensagem enviada com sucesso!");
-      else setStatus("❌ Erro ao enviar mensagem.");
+      setStatus(result.success ? "✅ Mensagem enviada com sucesso!" : "❌ Erro ao enviar mensagem.");
     } catch {
-      setStatus("⚠️ Erro de conexão com servidor.");
+      setStatus("❌ Erro de conexão com o servidor.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <input name="name" type="text" placeholder="Seu nome" required />
-      <input name="email" type="email" placeholder="Seu e-mail" required />
-      <textarea name="message" placeholder="Sua mensagem" required />
-      <button type="submit">Enviar</button>
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <input type="text" name="name" placeholder="Seu nome" required className="border p-2 w-full" />
+      <input type="email" name="email" placeholder="Seu email" required className="border p-2 w-full" />
+      <textarea name="message" placeholder="Sua mensagem" required className="border p-2 w-full" />
+      <button type="submit" className="bg-green-700 text-white px-4 py-2 rounded">Enviar</button>
       {status && <p>{status}</p>}
     </form>
   );
 }
+
