@@ -1,14 +1,25 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ContactForm from "./components/ContactForm";
 import Header from "./components/Header";
-import AdminLogin from "./pages/AdminLogin"; // ✅ login primeiro
+import AdminLogin from "./pages/AdminLogin";
 
 export default function App() {
   return (
     <Router>
       <div className="page">
-        <Header />
+        <header className="site-header">
+          <img src="/comurg.jpg" alt="Logo Comurg" className="logo" />
+          <h1>Viveiros ® Comurg</h1>
+          <p className="tagline">Sustentabilidade e Meio Ambiente</p>
+
+          <nav>
+            <a href="https://wa.me/5562999569870" className="whatsapp-button" target="_blank">
+              WhatsApp
+            </a>
+            <Link to="/admin" className="admin-button">Área Administrativa</Link>
+          </nav>
+        </header>
 
         <main className="container">
           <section className="hero">
@@ -27,6 +38,7 @@ export default function App() {
           <a href="mailto:syllfarney@hotmail.com">syllfarney@hotmail.com</a>
         </footer>
 
+        {/* Rotas da aplicação */}
         <Routes>
           <Route path="/admin" element={<AdminLogin />} />
         </Routes>
@@ -34,5 +46,4 @@ export default function App() {
     </Router>
   );
 }
-
 
