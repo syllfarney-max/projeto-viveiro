@@ -1,17 +1,29 @@
-// frontend/src/components/AdminPanel.jsx
-import React from "react";
+import { useEffect, useState } from "react";
 
-export default function AdminPanel({ messages }) {
-  if (!messages || messages.length === 0) return <p>Nenhuma mensagem disponível.</p>;
+export default function AdminPanel() {
+  const [messages, setMessages] = useState([]);
+
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/messages`)
+      .then((r) => r.json())
+      .then(setMessages)
+      .catch(() => setMessages([]));
+  }, []);
+
   return (
-    <ul style={{ listStyle: 'none', padding: 0 }}>
-      {messages.map((m, i) => (
-        <li key={i} style={{ border: '1px solid #ddd', padding: 12, marginBottom: 8 }}>
-          <strong>{m.name}</strong> — <em>{m.email}</em>
-          <p>{m.message}</p>
-          <small>{m.date}</small>
-        </li>
-      ))}
-    </ul>
+    <div className="admin-panel">
+      <h2>Mensagens Recebidas</h2>
+      {messages.length === 0 ? (
+        <p>Nenhuma mensagem disponível.</p>
+      ) : (
+        <ul>
+          {messages.map((m, i) => (
+            <li key={i}>
+              <strong>{m.name}</strong> ({m.email}) — {m.message}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
