@@ -3,7 +3,10 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import fs from "fs";
 import path from "path";
+import sgMail from "@sendgrid/mail";
+import dotenv from "dotenv";
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 10000;
 
@@ -11,51 +14,67 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const __dirname = path.resolve();
-const messagesFile = path.join(__dirname, "backend", "messages.json");
+const messagesFile = path.join(__dirname, "backend/messages.json");
 
-function getMessages() {
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
+
+// Simples persistência local
+function readMessages() {
+  if (!fs.existsSync(messagesFile)) return [];
+  const data = fs.readFileSync(messagesFile, "utf8");
   try {
-    const data = fs.readFileSync(messagesFile, "utf-8");
     return JSON.parse(data);
   } catch {
     return [];
   }
 }
 
-app.get("/", (req, res) => res.send("✅ Backend do Viveiro Comurg rodando!"));
+function saveMessage(msg) {
+  const all = readMessages();
+  all.push(msg);
+  fs.writeFileSync(messagesFile, JSON.stringify(all, null, 2));
+}
 
-app.post("/send", (req, res) => {
+// Rota de envio
+app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message)
     return res.status(400).json({ success: false, error: "Campos obrigatórios faltando." });
 
-  const newMessage = {
-    id: Date.now(),
-    name,
-    email,
-    message,
-    date: new Date().toLocaleString("pt-BR"),
+  const msg = {
+    to: process.env.CONTACT_EMAIL,
+    from: process.env.CONTACT_EMAIL,
+    subject: `Mensagem do site - ${name}`,
+    text: `Nome: ${name}\nEmail: ${email}\n\n${message}`,
+    replyTo: email,
   };
 
-  const messages = getMessages();
-  messages.push(newMessage);
-  fs.writeFileSync(messagesFile, JSON.stringify(messages, null, 2));
-
-  res.json({ success: true, message: "Mensagem recebida pelo backend (simulação)." });
-});
-
-app.post("/login", (req, res) => {
-  const { user, password } = req.body;
-  if (user === "admin" && password === "8865") {
-    res.json({ success: true, token: "autorizado" });
-  } else {
-    res.status(401).json({ success: false, message: "Credenciais inválidas" });
+  try {
+    if (process.env.SENDGRID_API_KEY) await sgMail.send(msg);
+    const entry = { name, email, message, date: new Date().toISOString() };
+    saveMessage(entry);
+    return res.json({ success: true, message: "Mensagem enviada e registrada!" });
+  } catch (err) {
+    console.error("Erro SendGrid:", err.response?.body ?? err);
+    return res.status(500).json({ success: false, error: "Erro ao enviar mensagem." });
   }
 });
 
-app.get("/messages", (req, res) => {
-  const messages = getMessages();
-  res.json(messages);
+// Login fixo
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "admin" && password === "8865") {
+    return res.json({ success: true, token: "ok-admin-token" });
+  }
+  return res.status(401).json({ success: false, error: "Credenciais inválidas." });
 });
 
-app.listen(PORT, () => console.log(`🚀 Backend rodando na porta ${PORT}`));
+// Mensagens administrativas
+app.get("/messages", (req, res) => {
+  const messages = readMessages();
+  res.json(messages.reverse());
+});
+
+app.get("/", (req, res) => res.send("✅ Backend do Viveiro Comurg rodando!"));
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+
