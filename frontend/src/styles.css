@@ -1,0 +1,10 @@
+body { font-family: Arial, sans-serif; margin:0; padding:0; background:#f6f9f4; color:#1f5c39 }
+.site-header{background:#2f7a4a;color:white;padding:20px;text-align:center}
+.logo{width:64px;height:64px;border-radius:8px;display:block;margin:0 auto 10px}
+.container{padding:20px;text-align:center}
+input, textarea{width:100%;max-width:480px;padding:8px;margin:6px 0;border:1px solid #ccc;border-radius:4px}
+button{padding:8px 14px;border-radius:6px;border:none;background:#1f5c39;color:white;cursor:pointer}
+.nav a{color:white;margin:0 8px;text-decoration:none}
+.actions{margin-top:12px}
+.btn{background:white;color:#2f7a4a;padding:8px 12px;border-radius:6px;text-decoration:none;margin-right:8px}
+.btn-secondary{background:#1f5c39;color:white;padding:8px 12px;border-radius:6px;text-decoration:none}
