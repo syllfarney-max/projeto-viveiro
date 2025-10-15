@@ -1,34 +1,17 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+// frontend/src/components/AdminPanel.jsx
+import React from "react";
 
-export default function AdminPanel() {
-  const [messages, setMessages] = useState([]);
-  const [error, setError] = useState('');
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const token = localStorage.getItem('adminToken');
-    if (!token) {
-      navigate('/admin');
-      return;
-    }
-    fetch(`${import.meta.env.VITE_API_URL}/messages`)
-      .then(res => {
-        if (!res.ok) throw new Error('erro');
-        return res.json();
-      })
-      .then(data => setMessages(data))
-      .catch(() => setError('Erro ao conectar com o servidor ou nenhum dado disponível.'));
-  }, []);
-
-  if (error) return <p className="error">{error}</p>;
-
+export default function AdminPanel({ messages }) {
+  if (!messages || messages.length === 0) return <p>Nenhuma mensagem disponível.</p>;
   return (
-    <div className="panel">
-      <h2>Mensagens Recebidas</h2>
-      {messages.length === 0 ? <p>Nenhuma mensagem.</p> : (
-        <ul>{messages.map((m,i)=>(<li key={i}><strong>{m.name}</strong> ({m.email})<p>{m.message}</p><small>{m.date}</small></li>))}</ul>
-      )}
-    </div>
+    <ul style={{ listStyle: 'none', padding: 0 }}>
+      {messages.map((m, i) => (
+        <li key={i} style={{ border: '1px solid #ddd', padding: 12, marginBottom: 8 }}>
+          <strong>{m.name}</strong> — <em>{m.email}</em>
+          <p>{m.message}</p>
+          <small>{m.date}</small>
+        </li>
+      ))}
+    </ul>
   );
 }
