@@ -1,22 +1,15 @@
+// frontend/src/components/Header.jsx
 export default function Header() {
   return (
-    <header className="flex flex-col items-center bg-green-900 text-white py-4">
+    <header className="site-header" style={{ textAlign: 'center', background: '#2f7a4a', color: '#fff', padding: '18px' }}>
       <img
         src="/comurg.jpg"
         alt="Logo Comurg"
-        className="w-14 h-14 mb-2 object-contain rounded-full"
-        onError={(e) => (e.target.style.display = "none")}
+        style={{ width: 48, height: 48, objectFit: 'contain', display: 'block', margin: '0 auto 8px' }}
+        onError={(e) => { e.target.style.display = 'none'; console.warn('Logo não carregou:', e.target.src); }}
       />
-      <h1 className="text-2xl font-bold">Viveiros ® Comurg</h1>
-      <p>Sustentabilidade e Meio Ambiente</p>
-      <a
-        href="https://wa.me/5562999569870?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20o%20Viveiros%20Comurg"
-        target="_blank"
-        rel="noreferrer"
-        className="mt-3 inline-block bg-white text-green-900 px-3 py-1 rounded"
-      >
-        WhatsApp
-      </a>
+      <h1 style={{ margin: 0 }}>Viveiros ® Comurg</h1>
+      <p style={{ margin: 0 }}>Sustentabilidade e Meio Ambiente</p>
     </header>
   );
 }
