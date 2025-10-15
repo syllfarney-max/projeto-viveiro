@@ -1,15 +1,16 @@
-// frontend/src/components/Header.jsx
+import React from "react";
+
 export default function Header() {
   return (
-    <header className="site-header" style={{ textAlign: 'center', background: '#2f7a4a', color: '#fff', padding: '18px' }}>
-      <img
-        src="/comurg.jpg"
-        alt="Logo Comurg"
-        style={{ width: 48, height: 48, objectFit: 'contain', display: 'block', margin: '0 auto 8px' }}
-        onError={(e) => { e.target.style.display = 'none'; console.warn('Logo não carregou:', e.target.src); }}
-      />
+    <header className="site-header">
+      <img src="/comurg.jpg" alt="Comurg logo" className="logo" onError={(e)=>e.target.style.display='none'} />
       <h1 style={{ margin: 0 }}>Viveiros ® Comurg</h1>
-      <p style={{ margin: 0 }}>Sustentabilidade e Meio Ambiente</p>
+      <p style={{ margin: '6px 0 0' }}>Sustentabilidade e Meio Ambiente</p>
+
+      <div className="actions" style={{ marginTop: 10 }}>
+        <a className="whatsapp-btn" href="https://wa.me/5562999569870" target="_blank" rel="noreferrer">WhatsApp</a>
+        <a className="admin-btn" href="/admin">Área Administrativa</a>
+      </div>
     </header>
   );
 }
