@@ -5,7 +5,12 @@ services:
     plan: free
     rootDir: backend
     buildCommand: "npm install"
-    startCommand: "node server.js"
+    startCommand: "npm start"
+    envVars:
+      - key: SENDGRID_API_KEY
+        sync: false
+      - key: CONTACT_EMAIL
+        sync: false
 
   - type: web
     name: viveiro-comurg-frontend
@@ -13,7 +18,7 @@ services:
     plan: free
     rootDir: frontend
     buildCommand: "npm install && npm run build"
-    publishPath: dist
+    publishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
         value: "https://viveiro-comurg-backend-yjsj.onrender.com"
