@@ -1,75 +1,69 @@
 import express from "express";
 import cors from "cors";
-import bodyParser from "body-parser";
 import fs from "fs";
+import path from "path";
 import dotenv from "dotenv";
-import sgMail from "@sendgrid/mail";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 10000;
 
+// Middlewares
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY || "");
+// Caminho do arquivo de mensagens
+const messagesFile = path.resolve("messages.json");
 
-// Banco simples de mensagens em JSON
-const MESSAGES_FILE = "./backend/messages.json";
+// 🔹 Rota inicial
+app.get("/", (req, res) => {
+  res.send("✅ Backend do Viveiros Comurg rodando normalmente!");
+});
 
-function saveMessage(message) {
-  let messages = [];
-  if (fs.existsSync(MESSAGES_FILE)) {
-    messages = JSON.parse(fs.readFileSync(MESSAGES_FILE));
-  }
-  messages.push(message);
-  fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2));
-}
-
-// Envio de mensagem
+// 🔹 Envio de mensagem (formulário)
 app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
-  if (!name || !email || !message)
-    return res.status(400).json({ success: false, error: "Campos obrigatórios faltando." });
 
-  const msg = {
-    to: process.env.CONTACT_EMAIL,
-    from: process.env.CONTACT_EMAIL,
-    subject: `Mensagem do site - ${name}`,
-    text: `Nome: ${name}\nEmail: ${email}\n\n${message}`,
-    replyTo: email,
-  };
+  if (!name || !email || !message) {
+    return res.status(400).json({ success: false, error: "Campos obrigatórios faltando." });
+  }
 
   try {
-    if (process.env.SENDGRID_API_KEY) {
-      await sgMail.send(msg);
+    let data = [];
+    if (fs.existsSync(messagesFile)) {
+      const raw = fs.readFileSync(messagesFile, "utf8");
+      if (raw.trim()) data = JSON.parse(raw);
     }
-    saveMessage({ name, email, message, date: new Date().toISOString() });
-    res.json({ success: true, message: "Mensagem enviada com sucesso!" });
+
+    const newMessage = {
+      id: Date.now(),
+      name,
+      email,
+      message,
+      date: new Date().toISOString(),
+    };
+
+    data.push(newMessage);
+    fs.writeFileSync(messagesFile, JSON.stringify(data, null, 2));
+
+    console.log("📩 Nova mensagem salva:", newMessage);
+    res.json({ success: true, message: "Mensagem recebida e salva com sucesso!" });
   } catch (err) {
-    console.error("Erro SendGrid:", err.message);
-    res.status(500).json({ success: false, error: "Erro ao enviar mensagem." });
+    console.error("❌ Erro ao salvar mensagem:", err);
+    res.status(500).json({ success: false, error: "Erro interno no servidor." });
   }
 });
 
-// Listar mensagens
+// 🔹 Visualização administrativa
 app.get("/messages", (req, res) => {
-  if (fs.existsSync(MESSAGES_FILE)) {
-    res.json(JSON.parse(fs.readFileSync(MESSAGES_FILE)));
-  } else {
-    res.json([]);
+  try {
+    if (!fs.existsSync(messagesFile)) return res.json([]);
+    const data = JSON.parse(fs.readFileSync(messagesFile, "utf8"));
+    res.json(data);
+  } catch (err) {
+    console.error("❌ Erro ao ler mensagens:", err);
+    res.status(500).json({ success: false, error: "Erro ao ler mensagens." });
   }
 });
 
-// Login simples (admin:8865)
-app.post("/login", (req, res) => {
-  const { user, password } = req.body;
-  if (user === "admin" && password === "8865") {
-    res.json({ success: true });
-  } else {
-    res.status(401).json({ success: false, error: "Credenciais inválidas." });
-  }
-});
-
-app.get("/", (req, res) => res.send("✅ Backend do Viveiro Comurg rodando!"));
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
+app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
