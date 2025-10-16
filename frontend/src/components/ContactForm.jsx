@@ -5,52 +5,41 @@ export default function ContactForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const data = {
       name: e.target.name.value,
       email: e.target.email.value,
       message: e.target.message.value,
     };
 
-    // ✅ fallback seguro caso a variável de ambiente não esteja configurada
-    const apiUrl =
-      import.meta.env.VITE_API_URL ||
-      "https://viveiro-comurg-backend-yjsj.onrender.com";
-
     try {
-      const res = await fetch(`${apiUrl}/send`, {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/send`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(data),
       });
 
-      // se a resposta não for JSON válida, evita quebra
-      let result = {};
-      try {
-        result = await res.json();
-      } catch {
-        result = { success: false };
-      }
-
-      if (res.ok && result.success !== false) {
+      const result = await res.json();
+      if (result.success) {
         setStatus("✅ Mensagem enviada com sucesso!");
         e.target.reset();
       } else {
         setStatus("❌ Erro ao enviar mensagem.");
       }
     } catch (err) {
-      console.error("Erro ao conectar:", err);
       setStatus("⚠️ Erro de conexão com o servidor.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form">
-      <input type="text" name="name" placeholder="Seu nome" required />
-      <input type="email" name="email" placeholder="Seu email" required />
-      <textarea name="message" placeholder="Sua mensagem" required />
-      <button type="submit">Enviar</button>
-      {status && <p className="status">{status}</p>}
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <input type="text" name="name" placeholder="Seu nome" required className="border p-2 w-full" />
+      <input type="email" name="email" placeholder="Seu email" required className="border p-2 w-full" />
+      <textarea name="message" placeholder="Sua mensagem" required className="border p-2 w-full" />
+      <button type="submit" className="bg-green-600 hover:bg-green-500 text-white px-4 py-2 rounded">
+        Enviar
+      </button>
+      {status && <p>{status}</p>}
     </form>
   );
 }
+
