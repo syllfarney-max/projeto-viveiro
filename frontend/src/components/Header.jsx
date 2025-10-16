@@ -1,24 +1,33 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React from "react";
 
 export default function Header() {
   return (
-    <header className="site-header">
-      <img src="/comurg.jpg" alt="Logo Comurg" className="logo" />
-      <h1>Viveiros ® Comurg</h1>
-      <p className="tagline">Sustentabilidade e Meio Ambiente</p>
-      <div className="button-container">
+    <header className="flex items-center justify-between p-4 bg-green-800 text-white">
+      <div className="flex items-center gap-3">
+        <img src="/comurg.jpg" alt="logo" className="w-10 h-10 rounded" />
+        <div>
+          <h1 className="font-bold text-lg">Viveiros ® Comurg</h1>
+          <small>Sustentabilidade e Meio Ambiente</small>
+        </div>
+      </div>
+
+      {/* Botões separados */}
+      <div className="flex items-center gap-4">
         <a
-          href="https://wa.me/5562999569870?text=Olá!%20Gostaria%20de%20mais%20informações%20sobre%20o%20Viveiro%20Comurg."
+          href="https://wa.me/5562999569870?text=Olá%20Quero%20mais%20informações%20sobre%20o%20Viveiro%20Comurg"
           target="_blank"
           rel="noreferrer"
-          className="button-link whatsapp"
+          className="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
         >
           WhatsApp
         </a>
-        <Link to="/admin" className="button-link admin">
+
+        <a
+          href="/admin"
+          className="bg-green-700 hover:bg-green-800 text-white font-semibold px-4 py-2 rounded-lg shadow-md transition"
+        >
           Área Administrativa
-        </Link>
+        </a>
       </div>
     </header>
   );
