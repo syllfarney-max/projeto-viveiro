@@ -1,69 +1,61 @@
 import express from "express";
 import cors from "cors";
+import bodyParser from "body-parser";
 import fs from "fs";
-import path from "path";
 import dotenv from "dotenv";
-
 dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 10000;
+const MESSAGES_FILE = "./backend/messages.json";
 
-// Middlewares
 app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
 
-// Caminho do arquivo de mensagens
-const messagesFile = path.resolve("messages.json");
-
-// 🔹 Rota inicial
-app.get("/", (req, res) => {
-  res.send("✅ Backend do Viveiros Comurg rodando normalmente!");
-});
-
-// 🔹 Envio de mensagem (formulário)
+// 📨 Envio de mensagens
 app.post("/send", async (req, res) => {
   const { name, email, message } = req.body;
-
-  if (!name || !email || !message) {
+  if (!name || !email || !message)
     return res.status(400).json({ success: false, error: "Campos obrigatórios faltando." });
-  }
+
+  const newMessage = {
+    id: Date.now(),
+    name,
+    email,
+    message,
+    date: new Date().toLocaleString(),
+  };
 
   try {
-    let data = [];
-    if (fs.existsSync(messagesFile)) {
-      const raw = fs.readFileSync(messagesFile, "utf8");
-      if (raw.trim()) data = JSON.parse(raw);
+    let messages = [];
+    if (fs.existsSync(MESSAGES_FILE)) {
+      messages = JSON.parse(fs.readFileSync(MESSAGES_FILE, "utf8"));
     }
-
-    const newMessage = {
-      id: Date.now(),
-      name,
-      email,
-      message,
-      date: new Date().toISOString(),
-    };
-
-    data.push(newMessage);
-    fs.writeFileSync(messagesFile, JSON.stringify(data, null, 2));
-
-    console.log("📩 Nova mensagem salva:", newMessage);
-    res.json({ success: true, message: "Mensagem recebida e salva com sucesso!" });
+    messages.push(newMessage);
+    fs.writeFileSync(MESSAGES_FILE, JSON.stringify(messages, null, 2));
+    res.json({ success: true, message: "Mensagem recebida com sucesso!" });
   } catch (err) {
-    console.error("❌ Erro ao salvar mensagem:", err);
-    res.status(500).json({ success: false, error: "Erro interno no servidor." });
+    console.error("Erro ao salvar mensagem:", err);
+    res.status(500).json({ success: false, error: "Erro ao salvar mensagem." });
   }
 });
 
-// 🔹 Visualização administrativa
+// 🔐 Login administrativo
+app.post("/admin/login", (req, res) => {
+  const { username, password } = req.body;
+  if (username === "admin" && password === "8865") {
+    return res.json({ success: true });
+  }
+  res.status(401).json({ success: false, message: "Credenciais inválidas." });
+});
+
+// 📄 Listar mensagens
 app.get("/messages", (req, res) => {
-  try {
-    if (!fs.existsSync(messagesFile)) return res.json([]);
-    const data = JSON.parse(fs.readFileSync(messagesFile, "utf8"));
-    res.json(data);
-  } catch (err) {
-    console.error("❌ Erro ao ler mensagens:", err);
-    res.status(500).json({ success: false, error: "Erro ao ler mensagens." });
-  }
+  if (!fs.existsSync(MESSAGES_FILE)) return res.json([]);
+  const messages = JSON.parse(fs.readFileSync(MESSAGES_FILE, "utf8"));
+  res.json(messages);
 });
 
-app.listen(PORT, () => console.log(`🚀 Servidor rodando na porta ${PORT}`));
+app.get("/", (_, res) => res.send("✅ Backend do Viveiro Comurg rodando!"));
+
+app.listen(PORT, () => console.log(`🚀 Backend rodando na porta ${PORT}`));
