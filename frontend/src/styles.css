@@ -1,50 +1,68 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  background: #f4f8f4;
+  color: #1f4d2e;
+}
+
 .site-header {
-  background-color: #f0f8f4;
-  padding: 20px;
   text-align: center;
+  background: #2f7a4a;
+  color: white;
+  padding: 1.5rem 1rem;
 }
 
 .logo {
-  width: 80px;
+  width: 60px;
   height: auto;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 
-.tagline {
-  color: #3a3a3a;
-  margin-top: -5px;
-  font-style: italic;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin-top: 15px;
-}
-
-.button-link {
+.btn-whatsapp,
+.btn-admin {
   display: inline-block;
-  padding: 10px 20px;
-  border-radius: 8px;
+  margin: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
   text-decoration: none;
-  color: #fff;
+  color: white;
   font-weight: bold;
 }
 
-.button-link.whatsapp {
-  background-color: #3ea35e;
+.btn-whatsapp {
+  background-color: #25d366;
 }
 
-.button-link.admin {
-  background-color: #14432a;
+.btn-admin {
+  background-color: #1f5c39;
 }
 
-.form input, .form textarea {
-  display: block;
-  width: 80%;
-  margin: 10px auto;
-  padding: 10px;
-  border-radius: 5px;
+.container {
+  padding: 2rem;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.form input,
+.form textarea {
+  padding: 0.5rem;
+  border-radius: 6px;
   border: 1px solid #ccc;
 }
+
+.form button {
+  background-color: #2f7a4a;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem;
+  cursor: pointer;
+}
+
