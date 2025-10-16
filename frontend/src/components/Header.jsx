@@ -49,16 +49,15 @@ export default function Header() {
           target="_blank"
           rel="noreferrer"
           style={{
-            backgroundColor: "#2f7a4a",
+            backgroundColor: "#3ea35e",
             color: "white",
             padding: "10px 20px",
             borderRadius: "8px",
             textDecoration: "none",
             fontWeight: "bold",
-            transition: "0.3s",
+            transition: "0.15s",
+            display: "inline-block"
           }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#3ea35e")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#2f7a4a")}
         >
           WhatsApp
         </a>
@@ -72,10 +71,9 @@ export default function Header() {
             borderRadius: "8px",
             textDecoration: "none",
             fontWeight: "bold",
-            transition: "0.3s",
+            transition: "0.15s",
+            display: "inline-block"
           }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#0d2e1c")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#14432a")}
         >
           Área Administrativa
         </Link>
