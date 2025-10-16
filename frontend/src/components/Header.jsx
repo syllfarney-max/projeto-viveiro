@@ -1,30 +1,36 @@
-import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="site-header">
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+    <header className="flex items-center justify-between p-4 bg-green-800 text-white flex-wrap">
+      <div className="flex items-center gap-3">
         <img
-          src="./comurg.jpg"
-          alt="Comurg logo"
-          className="logo"
-          style={{ width: 60, height: "auto", marginBottom: 8 }}
+          src="/comurg.jpg"
+          alt="logo"
+          className="w-10 h-10 rounded-full bg-white p-1"
         />
-        <h1>Viveiros ® Comurg</h1>
-        <p>Sustentabilidade e Meio Ambiente</p>
+        <div>
+          <h1 className="font-bold text-lg">Viveiros ® Comurg</h1>
+          <p className="text-sm opacity-80">Sustentabilidade e Meio Ambiente</p>
+        </div>
       </div>
-      <div className="actions" style={{ marginTop: 10 }}>
+
+      <div className="flex items-center gap-4 mt-3 sm:mt-0">
         <a
-          className="whatsapp-btn"
-          href="https://wa.me/5562999569870"
+          href="https://wa.me/5562999569870?text=Olá!%20Gostaria%20de%20mais%20informações%20sobre%20o%20Viveiro%20Comurg."
           target="_blank"
           rel="noreferrer"
+          className="bg-green-500 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-600 transition"
         >
           WhatsApp
         </a>
-        <a className="admin-btn" href="/admin">
+
+        <Link
+          to="/admin"
+          className="bg-green-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-green-900 transition"
+        >
           Área Administrativa
-        </a>
+        </Link>
       </div>
     </header>
   );
