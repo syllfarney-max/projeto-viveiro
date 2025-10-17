@@ -1,3 +1,4 @@
+// frontend/src/components/Header.jsx
 import { Link } from "react-router-dom";
 
 export default function Header() {
@@ -7,58 +8,38 @@ export default function Header() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "15px 25px",
-        backgroundColor: "#1f5c39",
-        color: "white",
-        flexWrap: "wrap",
+        padding: "10px 20px",
+        backgroundColor: "#f5f5f5",
+        borderBottom: "2px solid #2e7d32",
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
         <img
           src="/comurg.jpg"
-          alt="logo"
-          style={{
-            width: "48px",
-            height: "48px",
-            borderRadius: "50%",
-            backgroundColor: "white",
-            padding: "4px",
-          }}
+          alt="Comurg logo"
+          style={{ width: "50px", height: "auto", borderRadius: "6px" }}
         />
         <div>
-          <h1 style={{ margin: 0, fontSize: "20px", fontWeight: "bold" }}>
-            Viveiros ® Comurg
-          </h1>
-          <p style={{ margin: 0, opacity: 0.8, fontSize: "14px" }}>
+          <h1 style={{ margin: 0, color: "#2e7d32" }}>Viveiros ® Comurg</h1>
+          <p style={{ margin: 0, fontSize: "0.9rem", color: "#333" }}>
             Sustentabilidade e Meio Ambiente
           </p>
         </div>
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "15px",
-          marginTop: "10px",
-          flexWrap: "wrap",
-        }}
-      >
+      <div style={{ display: "flex", gap: "12px" }}>
         <a
-          href="https://wa.me/5562999569870?text=Olá!%20Gostaria%20de%20mais%20informações%20sobre%20o%20Viveiro%20Comurg."
+          href="https://wa.me/5562999569870?text=Olá,%20quero%20mais%20informações!"
           target="_blank"
           rel="noreferrer"
           style={{
-            backgroundColor: "#2f7a4a",
+            backgroundColor: "#4caf50",
             color: "white",
-            padding: "10px 20px",
-            borderRadius: "8px",
+            padding: "8px 14px",
+            borderRadius: "6px",
             textDecoration: "none",
             fontWeight: "bold",
-            transition: "0.3s",
           }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#3ea35e")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#2f7a4a")}
         >
           WhatsApp
         </a>
@@ -66,16 +47,13 @@ export default function Header() {
         <Link
           to="/admin"
           style={{
-            backgroundColor: "#14432a",
+            backgroundColor: "#1b5e20",
             color: "white",
-            padding: "10px 20px",
-            borderRadius: "8px",
+            padding: "8px 14px",
+            borderRadius: "6px",
             textDecoration: "none",
             fontWeight: "bold",
-            transition: "0.3s",
           }}
-          onMouseOver={(e) => (e.target.style.backgroundColor = "#0d2e1c")}
-          onMouseOut={(e) => (e.target.style.backgroundColor = "#14432a")}
         >
           Área Administrativa
         </Link>
