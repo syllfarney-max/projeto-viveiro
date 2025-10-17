@@ -1,64 +1,87 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
-import ContactForm from "./components/ContactForm";
-import Header from "./components/Header";
-import AdminLogin from "./pages/AdminLogin";
-import "./styles.css"; // garante que o CSS atualizado será carregado
+import "./styles.css";
 
-export default function App() {
+function App() {
   return (
-    <Router>
-      <div className="page">
-        {/* ======= CABEÇALHO ======= */}
-        <header className="site-header">
-          <img src="/comurg.jpg" alt="Logo Comurg" className="logo" />
-          <h1>Viveiros ® Comurg</h1>
-          <p className="tagline">Sustentabilidade e Meio Ambiente</p>
+    <div className="App">
+      <header className="site-header">
+        <img
+          src="/logo.png"
+          alt="Logo Viveiro Comurg"
+          className="logo"
+        />
+        <p className="tagline">Viveiro Comurg</p>
 
-          {/* Botões organizados e centralizados */}
-          <nav className="button-container">
-            <a
-              href="https://wa.me/5562999569870"
-              className="whatsapp-button"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              WhatsApp
-            </a>
-            <Link to="/admin" className="admin-button">
-              Área Administrativa
-            </Link>
-          </nav>
-        </header>
+        <div className="button-container">
+          <a
+            href="https://wa.me/5562999999999"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="whatsapp-button"
+          >
+            WhatsApp
+          </a>
+          <a
+            href="/admin"
+            className="admin-button"
+          >
+            Área Administrativa
+          </a>
+        </div>
+      </header>
 
-        {/* ======= CONTEÚDO PRINCIPAL ======= */}
-        <main className="container">
-          <section className="hero">
-            <h2>Produção de mudas e soluções ambientais</h2>
-            <p>
-              Mudas para paisagismo, recuperação ambiental e projetos de
-              reflorestamento.
-            </p>
-          </section>
-
-          <section className="contact">
-            <h3>Fale conosco</h3>
-            <ContactForm />
-          </section>
-        </main>
-
-        {/* ======= RODAPÉ ======= */}
-        <footer className="site-footer">
-          © {new Date().getFullYear()} Viveiros ® Comurg — contato:{" "}
-          <a href="mailto:syllfarney@hotmail.com">syllfarney@hotmail.com</a>
-        </footer>
-
-        {/* ======= ROTAS ======= */}
-        <Routes>
-          <Route path="/admin" element={<AdminLogin />} />
-        </Routes>
-      </div>
-    </Router>
+      <main className="main-content">
+        <h2>Formulário de Contato</h2>
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            const data = {
+              name: e.target.name.value,
+              email: e.target.email.value,
+              message: e.target.message.value,
+            };
+            try {
+              const res = await fetch(
+                "https://viveiro-comurg-backend-34cj.onrender.com/send",
+                {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(data),
+                }
+              );
+              if (res.ok) {
+                alert("Mensagem enviada com sucesso!");
+                e.target.reset();
+              } else {
+                alert("Erro ao enviar a mensagem.");
+              }
+            } catch (error) {
+              alert("Erro ao conectar com o servidor.");
+            }
+          }}
+        >
+          <input
+            type="text"
+            name="name"
+            placeholder="Seu nome"
+            required
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Seu e-mail"
+            required
+          />
+          <textarea
+            name="message"
+            placeholder="Sua mensagem"
+            required
+          />
+          <button type="submit">Enviar Mensagem</button>
+        </form>
+      </main>
+    </div>
   );
 }
 
+export default App;
