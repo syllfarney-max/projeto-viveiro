@@ -1,50 +1,129 @@
-.site-header {
+/* === LAYOUT GERAL === */
+body {
+  margin: 0;
+  font-family: "Segoe UI", Roboto, Arial, sans-serif;
   background-color: #f0f8f4;
-  padding: 20px;
+  color: #222;
+}
+
+/* === CABEÇALHO === */
+.site-header {
+  background-color: #14432a; /* verde escuro */
+  color: #fff;
+  padding: 30px 20px;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  border-bottom: 4px solid #0e2c1c;
 }
 
 .logo {
-  width: 80px;
+  width: 100px;
   height: auto;
   margin-bottom: 10px;
+  border-radius: 8px;
+}
+
+h1 {
+  margin: 5px 0;
+  font-size: 1.8rem;
 }
 
 .tagline {
-  color: #3a3a3a;
-  margin-top: -5px;
+  color: #d6f5e3;
+  margin-top: 5px;
   font-style: italic;
 }
 
-.button-container {
+/* === NAVEGAÇÃO === */
+nav {
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 15px;
-  margin-top: 15px;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
-.button-link {
+nav a {
   display: inline-block;
-  padding: 10px 20px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: #fff;
+  padding: 10px 18px;
+  border-radius: 25px;
   font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
 }
 
-.button-link.whatsapp {
+.whatsapp-button {
   background-color: #3ea35e;
+  color: #fff;
 }
 
-.button-link.admin {
-  background-color: #14432a;
+.whatsapp-button:hover {
+  background-color: #2b8c4a;
 }
 
-.form input, .form textarea {
+.admin-button {
+  background-color: #1a623f;
+  color: #fff;
+}
+
+.admin-button:hover {
+  background-color: #0e422a;
+}
+
+/* === CONTEÚDO PRINCIPAL === */
+.container {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.hero h2 {
+  font-size: 1.6rem;
+  color: #14432a;
+}
+
+.contact {
+  margin-top: 40px;
+}
+
+/* === FORMULÁRIO === */
+.form input,
+.form textarea {
   display: block;
   width: 80%;
+  max-width: 500px;
   margin: 10px auto;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 6px;
   border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.form button {
+  margin-top: 10px;
+  background-color: #14432a;
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.form button:hover {
+  background-color: #1a623f;
+}
+
+/* === RODAPÉ === */
+.site-footer {
+  background-color: #14432a;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
+  margin-top: 50px;
 }
