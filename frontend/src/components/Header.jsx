@@ -5,29 +5,40 @@ export default function Header() {
   return (
     <header
       style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: "10px 20px",
-        backgroundColor: "#f5f5f5",
-        borderBottom: "2px solid #2e7d32",
+        backgroundColor: "#1b5e20", // verde escuro
+        color: "white",
+        padding: "20px 0",
+        textAlign: "center",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <img
-          src="/comurg.jpg"
-          alt="Comurg logo"
-          style={{ width: "50px", height: "auto", borderRadius: "6px" }}
-        />
-        <div>
-          <h1 style={{ margin: 0, color: "#2e7d32" }}>Viveiros ® Comurg</h1>
-          <p style={{ margin: 0, fontSize: "0.9rem", color: "#333" }}>
-            Sustentabilidade e Meio Ambiente
-          </p>
-        </div>
-      </div>
+      {/* LOGO */}
+      <img
+        src="/comurg.jpg"
+        alt="Comurg logo"
+        style={{
+          width: "90px",
+          height: "auto",
+          marginBottom: "10px",
+        }}
+      />
 
-      <div style={{ display: "flex", gap: "12px" }}>
+      {/* TÍTULO */}
+      <h1 style={{ margin: "0", fontSize: "1.8rem", fontWeight: "bold" }}>
+        Viveiros ® Comurg
+      </h1>
+      <p style={{ marginTop: "4px", fontSize: "1rem" }}>
+        Sustentabilidade e Meio Ambiente
+      </p>
+
+      {/* BOTÕES */}
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          gap: "12px",
+          marginTop: "10px",
+        }}
+      >
         <a
           href="https://wa.me/5562999569870?text=Olá,%20quero%20mais%20informações!"
           target="_blank"
@@ -47,7 +58,7 @@ export default function Header() {
         <Link
           to="/admin"
           style={{
-            backgroundColor: "#1b5e20",
+            backgroundColor: "#145a32",
             color: "white",
             padding: "8px 14px",
             borderRadius: "6px",
