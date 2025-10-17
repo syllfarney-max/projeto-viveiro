@@ -1,28 +1,59 @@
+// frontend/src/components/Header.jsx
 import { Link } from "react-router-dom";
 
 export default function Header() {
   return (
-    <header className="flex flex-col items-center justify-between bg-green-700 text-white p-4 sm:flex-row">
-      <div className="flex items-center gap-3">
-        <img src="/comurg.jpg" alt="Logo Comurg" className="w-10 h-10 rounded-full" />
+    <header
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "10px 20px",
+        backgroundColor: "#f5f5f5",
+        borderBottom: "2px solid #2e7d32",
+      }}
+    >
+      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <img
+          src="/comurg.jpg"
+          alt="Comurg logo"
+          style={{ width: "50px", height: "auto", borderRadius: "6px" }}
+        />
         <div>
-          <h1 className="text-xl font-bold">Viveiros ® Comurg</h1>
-          <p className="text-sm opacity-80">Sustentabilidade e Meio Ambiente</p>
+          <h1 style={{ margin: 0, color: "#2e7d32" }}>Viveiros ® Comurg</h1>
+          <p style={{ margin: 0, fontSize: "0.9rem", color: "#333" }}>
+            Sustentabilidade e Meio Ambiente
+          </p>
         </div>
       </div>
 
-      <div className="flex gap-3 mt-3 sm:mt-0">
+      <div style={{ display: "flex", gap: "12px" }}>
         <a
-          href="https://wa.me/5562999569870?text=Olá%20Quero%20mais%20informações%20sobre%20o%20Viveiro%20Comurg"
+          href="https://wa.me/5562999569870?text=Olá,%20quero%20mais%20informações!"
           target="_blank"
-          rel="noopener noreferrer"
-          className="bg-green-500 hover:bg-green-400 text-white font-medium px-4 py-2 rounded-lg transition"
+          rel="noreferrer"
+          style={{
+            backgroundColor: "#4caf50",
+            color: "white",
+            padding: "8px 14px",
+            borderRadius: "6px",
+            textDecoration: "none",
+            fontWeight: "bold",
+          }}
         >
           WhatsApp
         </a>
+
         <Link
           to="/admin"
-          className="bg-green-800 hover:bg-green-700 text-white font-medium px-4 py-2 rounded-lg transition"
+          style={{
+            backgroundColor: "#1b5e20",
+            color: "white",
+            padding: "8px 14px",
+            borderRadius: "6px",
+            textDecoration: "none",
+            fontWeight: "bold",
+          }}
         >
           Área Administrativa
         </Link>
