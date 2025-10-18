@@ -1,132 +1,105 @@
-/* ===== CABEÇALHO AJUSTADO ===== */
+/* ======= CABEÇALHO ======= */
 .site-header {
-  background-color: #14432a;
-  color: #fff;
-  padding: 20px 15px; /* altura equilibrada */
+  background-color: #0f3d24; /* verde escuro */
+  padding: 25px 10px;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  color: #ffffff;
 }
 
-/* Logo */
 .logo {
-  max-width: 110px;
-  max-height: 70px;
-  object-fit: contain;
+  width: 80px;
+  height: auto;
+  margin-bottom: 8px;
 }
 
-/* Título e subtítulo */
+/* título e subtítulo */
 .site-header h1 {
-  margin: 4px 0 0;
-  font-size: 1.6rem;
-  line-height: 1.1;
+  margin: 5px 0 2px 0;
+  font-size: 1.8em;
+  font-weight: bold;
 }
 
 .tagline {
-  color: #d6f5e3;
+  font-size: 1.1em;
   font-style: italic;
-  margin: 0;
-  font-size: 0.95rem;
+  margin-bottom: 15px;
+  color: #c8e6c9;
 }
 
-/* Botões */
+/* ======= BOTÕES ======= */
 .button-container {
   display: flex;
-  gap: 16px;
   justify-content: center;
+  gap: 15px;
+  margin-top: 10px;
   flex-wrap: wrap;
 }
 
 .whatsapp-button,
 .admin-button {
   display: inline-block;
-  padding: 9px 18px;
-  border-radius: 20px;
+  padding: 10px 22px;
+  border-radius: 8px;
   text-decoration: none;
-  color: #fff;
-  font-weight: 700;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  transition: background 0.2s ease, transform 0.2s ease;
+  color: #ffffff;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
+/* cores dos botões */
 .whatsapp-button {
-  background: #3ea35e;
-}
-
-.whatsapp-button:hover {
-  background: #2f8e4f;
-  transform: scale(1.05);
+  background-color: #25d366;
 }
 
 .admin-button {
-  background: #0f2c1d;
+  background-color: #1a5c37;
 }
 
+.whatsapp-button:hover,
 .admin-button:hover {
-  background: #173e29;
   transform: scale(1.05);
+  filter: brightness(1.1);
 }
 
-/* ===== FORMULÁRIO ===== */
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+/* ======= CONTEÚDO PRINCIPAL ======= */
+.container {
+  padding: 20px;
+  text-align: center;
 }
 
-form input,
-form textarea {
+.hero {
+  margin-bottom: 25px;
+}
+
+.contact {
+  margin-top: 30px;
+}
+
+/* ======= FORMULÁRIO ======= */
+.form input,
+.form textarea {
+  display: block;
   width: 80%;
-  margin: 0 auto;
+  margin: 10px auto;
   padding: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
 }
 
-form button {
-  background-color: #14432a;
-  color: white;
-  border: none;
-  padding: 10px;
-  width: 80%;
-  margin: 10px auto;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-form button:hover {
-  background-color: #1c5c3a;
-}
-
-/* ===== RODAPÉ ===== */
+/* ======= RODAPÉ ======= */
 .site-footer {
   text-align: center;
-  margin-top: 40px;
-  padding: 20px;
+  padding: 15px;
   background-color: #f0f8f4;
   color: #333;
-  font-size: 0.9rem;
+  font-size: 0.9em;
 }
 
-/* ===== RESPONSIVO ===== */
-@media (max-width: 600px) {
-  .site-header h1 {
-    font-size: 1.4rem;
-  }
-
-  .logo {
-    max-width: 90px;
-    max-height: 60px;
-  }
-
-  .button-container {
-    gap: 10px;
-  }
+.site-footer a {
+  color: #0f3d24;
+  text-decoration: none;
 }
 
+.site-footer a:hover {
+  text-decoration: underline;
+}
