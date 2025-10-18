@@ -1,129 +1,132 @@
-/* === LAYOUT GERAL === */
-body {
-  margin: 0;
-  font-family: "Segoe UI", Roboto, Arial, sans-serif;
-  background-color: #f0f8f4;
-  color: #222;
-}
-
-/* === CABEÇALHO === */
+/* ===== CABEÇALHO AJUSTADO ===== */
 .site-header {
-  background-color: #14432a; /* verde escuro */
+  background-color: #14432a;
   color: #fff;
-  padding: 30px 20px;
+  padding: 20px 15px; /* altura equilibrada */
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  border-bottom: 4px solid #0e2c1c;
+  gap: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 }
 
+/* Logo */
 .logo {
-  width: 100px;
-  height: auto;
-  margin-bottom: 10px;
-  border-radius: 8px;
+  max-width: 110px;
+  max-height: 70px;
+  object-fit: contain;
 }
 
-h1 {
-  margin: 5px 0;
-  font-size: 1.8rem;
+/* Título e subtítulo */
+.site-header h1 {
+  margin: 4px 0 0;
+  font-size: 1.6rem;
+  line-height: 1.1;
 }
 
 .tagline {
   color: #d6f5e3;
-  margin-top: 5px;
   font-style: italic;
+  margin: 0;
+  font-size: 0.95rem;
 }
 
-/* === NAVEGAÇÃO === */
-nav {
+/* Botões */
+.button-container {
   display: flex;
+  gap: 16px;
   justify-content: center;
-  align-items: center;
-  gap: 15px;
-  margin-top: 20px;
   flex-wrap: wrap;
 }
 
-nav a {
+.whatsapp-button,
+.admin-button {
   display: inline-block;
-  padding: 10px 18px;
-  border-radius: 25px;
-  font-weight: bold;
+  padding: 9px 18px;
+  border-radius: 20px;
   text-decoration: none;
-  transition: all 0.3s ease;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transition: background 0.2s ease, transform 0.2s ease;
 }
 
 .whatsapp-button {
-  background-color: #3ea35e;
-  color: #fff;
+  background: #3ea35e;
 }
 
 .whatsapp-button:hover {
-  background-color: #2b8c4a;
+  background: #2f8e4f;
+  transform: scale(1.05);
 }
 
 .admin-button {
-  background-color: #1a623f;
-  color: #fff;
+  background: #0f2c1d;
 }
 
 .admin-button:hover {
-  background-color: #0e422a;
+  background: #173e29;
+  transform: scale(1.05);
 }
 
-/* === CONTEÚDO PRINCIPAL === */
-.container {
-  text-align: center;
-  padding: 40px 20px;
+/* ===== FORMULÁRIO ===== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.hero h2 {
-  font-size: 1.6rem;
-  color: #14432a;
-}
-
-.contact {
-  margin-top: 40px;
-}
-
-/* === FORMULÁRIO === */
-.form input,
-.form textarea {
-  display: block;
+form input,
+form textarea {
   width: 80%;
-  max-width: 500px;
-  margin: 10px auto;
+  margin: 0 auto;
   padding: 10px;
-  border-radius: 6px;
+  border-radius: 5px;
   border: 1px solid #ccc;
-  font-size: 1rem;
 }
 
-.form button {
-  margin-top: 10px;
+form button {
   background-color: #14432a;
   color: white;
   border: none;
-  padding: 10px 18px;
-  border-radius: 8px;
+  padding: 10px;
+  width: 80%;
+  margin: 10px auto;
+  border-radius: 5px;
   cursor: pointer;
-  transition: 0.3s;
+  font-weight: bold;
 }
 
-.form button:hover {
-  background-color: #1a623f;
+form button:hover {
+  background-color: #1c5c3a;
 }
 
-/* === RODAPÉ === */
+/* ===== RODAPÉ ===== */
 .site-footer {
-  background-color: #14432a;
-  color: #fff;
   text-align: center;
-  padding: 15px;
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f0f8f4;
+  color: #333;
   font-size: 0.9rem;
-  margin-top: 50px;
 }
+
+/* ===== RESPONSIVO ===== */
+@media (max-width: 600px) {
+  .site-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .logo {
+    max-width: 90px;
+    max-height: 60px;
+  }
+
+  .button-container {
+    gap: 10px;
+  }
+}
+
