@@ -8,10 +8,11 @@ export default function App() {
   return (
     <Router>
       <div className="page">
+        {/* ======= CABEÇALHO ======= */}
         <header className="site-header">
-          <img src="/comurg.jpg" alt="Logo Viveiro Comurg" className="logo" />
-          <h1>Logo Viveiro Comurg</h1>
-          <p className="tagline">Viveiro Comurg</p>
+          <img src="/comurg.jpg" alt="Logo Comurg" className="logo" />
+          <h1>Viveiros ® Comurg</h1>
+          <p className="tagline">Sustentabilidade e Meio Ambiente</p>
 
           <div className="button-container">
             <a
@@ -28,18 +29,29 @@ export default function App() {
           </div>
         </header>
 
+        {/* ======= CONTEÚDO PRINCIPAL ======= */}
         <main className="container">
+          <section className="hero">
+            <h2>Produção de mudas e soluções ambientais</h2>
+            <p>
+              Mudas para paisagismo, recuperação ambiental e projetos de
+              reflorestamento.
+            </p>
+          </section>
+
           <section className="contact">
-            <h3>Formulário de Contato</h3>
+            <h3>Fale conosco</h3>
             <ContactForm />
           </section>
         </main>
 
+        {/* ======= RODAPÉ ======= */}
         <footer className="site-footer">
           © {new Date().getFullYear()} Viveiros ® Comurg — contato:{" "}
           <a href="mailto:syllfarney@hotmail.com">syllfarney@hotmail.com</a>
         </footer>
 
+        {/* ======= ROTAS ======= */}
         <Routes>
           <Route path="/admin" element={<AdminLogin />} />
         </Routes>
