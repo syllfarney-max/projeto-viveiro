@@ -30,13 +30,12 @@ services:
       - key: JWT_SECRET
         sync: false
 
-  - type: web
+  - type: static_site
     name: viveiro-comurg-frontend
-    env: static
     plan: free
     rootDir: frontend
     buildCommand: "npm install && npm run build"
-    publishPath: frontend/dist
+    publishPath: dist
     envVars:
       - key: VITE_API_URL
         value: "https://viveiro-comurg-backend-yjsj.onrender.com/api"
