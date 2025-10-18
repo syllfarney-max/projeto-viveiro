@@ -2,21 +2,42 @@ services:
   - type: web
     name: viveiro-comurg-backend
     env: node
+    plan: free
     rootDir: backend
     buildCommand: "npm install"
-    startCommand: "npm start"
+    startCommand: "node server.js"
     envVars:
+      - key: DB_HOST
+        value: dpg-d3ppuumr433s73akgdq0-a
+      - key: DB_NAME
+        value: sjpda
+      - key: DB_USER
+        value: sjpda_user
+      - key: DB_PASSWORD
+        value: X4RKJYtgm3rXBfEhT5k0LGZhFsoAXtIH
+      - key: DB_PORT
+        value: 5432
+      - key: CONTACT_EMAIL
+        value: syllfarney@hotmail.com
       - key: SENDGRID_API_KEY
         sync: false
-      - key: CONTACT_EMAIL
+      - key: SENDGRID_FROM
+        value: noreply@viveirocomurg.com.br
+      - key: ADMIN_EMAIL
+        value: syllfarney@hotmail.com
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: JWT_SECRET
         sync: false
 
-  - type: web
+  - type: rede
     name: viveiro-comurg-frontend
     env: static
+    plan: free
     rootDir: frontend
     buildCommand: "npm install && npm run build"
-    publishPath: dist
+    publishPath: frontend/dist
     envVars:
       - key: VITE_API_URL
-        value: "https://viveiro-comurg-backend-yjsj.onrender.com"
+        value: "https://viveiro-comurg-backend-yjsj.onrender.com/api"
+
