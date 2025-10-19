@@ -18,23 +18,23 @@ const AdminLogin = () => {
 
       const result = await response.json();
 
-      if (result.success) {
-        setStatus("Login realizado com sucesso!");
+      if (response.ok && result.success) {
         localStorage.setItem("adminLoggedIn", "true");
+        setStatus("✅ Login realizado com sucesso!");
         window.location.href = "/admin";
       } else {
-        setStatus("Credenciais inválidas. Tente novamente.");
+        setStatus("❌ Credenciais inválidas. Tente novamente.");
       }
     } catch (error) {
       console.error("Erro de conexão com o servidor:", error);
-      setStatus("Erro de conexão com o servidor.");
+      setStatus("❌ Erro de conexão com o servidor.");
     }
   };
 
   return (
-    <div className="admin-login-container">
+    <section className="admin-login-section">
       <h2>Área Administrativa</h2>
-      <form onSubmit={handleSubmit} className="admin-login-form">
+      <form className="admin-login-form" onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="E-mail"
@@ -52,7 +52,7 @@ const AdminLogin = () => {
         <button type="submit">Entrar</button>
       </form>
       {status && <p className="status-message">{status}</p>}
-    </div>
+    </section>
   );
 };
 
