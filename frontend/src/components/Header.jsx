@@ -1,14 +1,17 @@
 import React from "react";
 
-const Header = () => (
-  <header className="header">
-    <img src="/logo.png" alt="Logo Viveiros Comurg" className="logo" />
-    <h1>Viveiros ® Comurg Sustentabilidade e Meio Ambiente</h1>
-    <div className="buttons">
-      <button className="zap-btn">WhatsApp</button>
-      <button className="admin-btn">Área Administrativa</button>
-    </div>
-  </header>
-);
-
-export default Header;
+export default function Header() {
+  return (
+    <header className="header">
+      <nav className="navbar">
+        <h1 className="logo">🌿 Viveiro COMURG</h1>
+        <ul className="nav-links">
+          <li><a href="/">Início</a></li>
+          <li><a href="/#sobre">Sobre</a></li>
+          <li><a href="/#contato">Contato</a></li>
+          <li><a href="/admin">Área Administrativa</a></li>
+        </ul>
+      </nav>
+    </header>
+  );
+}
