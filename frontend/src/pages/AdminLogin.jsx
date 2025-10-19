@@ -1,42 +1,46 @@
 import React, { useState } from "react";
-import axios from "axios";
-
-const API_ROOT = import.meta.env.VITE_API_URL || "https://viveiro-comurg-backend-yjsj.onrender.com";
 
 export default function AdminLogin() {
-  const [form, setForm] = useState({ email: "", password: "" });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [status, setStatus] = useState("");
-
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("Autenticando...");
+    setStatus("Verificando...");
+
     try {
-      const res = await axios.post(`${API_ROOT}/api/admin/login`, form);
-      if (res.data.success) {
-        setStatus("✅ Acesso permitido");
-        localStorage.setItem("admin_token", res.data.token || "token");
-        // redirecionar para painel se existir
-        window.location.href = "/admin/dashboard";
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL || "https://viveiro-comurg-backend-yjsj.onrender.com"}/admin/login`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      const data = await response.json();
+      if (data.success) {
+        setStatus("✅ Login realizado com sucesso!");
+        setEmail("");
+        setPassword("");
       } else {
-        setStatus("❌ Credenciais inválidas");
+        setStatus("❌ " + data.message);
       }
-    } catch (err) {
-      console.error(err);
-      setStatus("❌ Erro de autenticação");
+    } catch {
+      setStatus("⚠️ Erro de conexão com o servidor.");
     }
   };
 
   return (
-    <section className="admin-login">
+    <div className="admin-login">
       <h2>Área Administrativa</h2>
-      <form onSubmit={handleSubmit} className="form">
-        <input name="email" placeholder="E-mail" value={form.email} onChange={handleChange} required />
-        <input name="password" type="password" placeholder="Senha" value={form.password} onChange={handleChange} required />
+      <form onSubmit={handleSubmit}>
+        <input type="email" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input type="password" placeholder="Senha" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit" className="btn-send">Entrar</button>
       </form>
       {status && <p className="status">{status}</p>}
-    </section>
+    </div>
   );
 }
