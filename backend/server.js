@@ -3,21 +3,36 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import db from "./db.js";
-import path from "path";
-import { fileURLToPath } from "url";
 import nodemailer from "nodemailer";
 
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-app.use(cors());
+const allowedOrigins = [
+  "https://viveiro-comurg-frontend.onrender.com",
+  "http://localhost:5173",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("CORS bloqueado para essa origem"));
+      }
+    },
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
+
 app.use(express.json());
 
-// health
+// rota health check
 app.get("/", (req, res) => res.send("🌱 Backend do Viveiros Comurg rodando!"));
 
-// -- cria tabela simples messages se não existir (útil em deploy inicial)
 async function ensureTables() {
   try {
     await db.query(`
@@ -35,7 +50,7 @@ async function ensureTables() {
 }
 ensureTables();
 
-// POST /api/send  -> recebe form e salva + opcional envia e-mail via SendGrid (nodemailer com SendGrid)
+// POST /api/send -> formulário de contato
 app.post("/api/send", async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message) {
@@ -43,13 +58,10 @@ app.post("/api/send", async (req, res) => {
   }
 
   try {
-    const insert = await db.query(
-      "INSERT INTO messages (name, email, message) VALUES ($1,$2,$3) RETURNING *",
-      [name, email, message]
-    );
+    await db.query("INSERT INTO messages (name, email, message) VALUES ($1,$2,$3)", [name, email, message]);
 
-    // Envio de e-mail (via Nodemailer + SendGrid SMTP or 'SendGrid' if configured)
-    if (process.env.SENDGRID_API_KEY) {
+    // envio de e-mail (opcional)
+    if (process.env.SENDGRID_API_KEY && process.env.CONTACT_EMAIL) {
       try {
         const transporter = nodemailer.createTransport({
           service: "SendGrid",
@@ -62,24 +74,22 @@ app.post("/api/send", async (req, res) => {
         await transporter.sendMail({
           from: process.env.SENDGRID_FROM || process.env.CONTACT_EMAIL,
           to: process.env.CONTACT_EMAIL,
-          subject: `🌿 Nova mensagem do site - ${name}`,
-          text: `Nome: ${name}\nEmail: ${email}\n\n${message}`,
+          subject: `🌿 Nova mensagem - ${name}`,
           html: `<p><strong>Nome:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p>${message}</p>`,
         });
       } catch (mailErr) {
-        console.error("Erro no envio de e-mail (continuando):", mailErr?.response ?? mailErr);
-        // não falhar a requisição apenas por falha no e-mail
+        console.error("Erro no envio de e-mail:", mailErr);
       }
     }
 
     res.json({ success: true, message: "Mensagem enviada com sucesso!" });
   } catch (err) {
-    console.error("Erro ao salvar mensagem:", err);
+    console.error("Erro ao salvar/enviar mensagem:", err);
     res.status(500).json({ success: false, error: "Erro interno no servidor." });
   }
 });
 
-// GET /api/messages -> retorna lista (admin)
+// GET /api/messages -> área admin
 app.get("/api/messages", async (req, res) => {
   try {
     const result = await db.query("SELECT * FROM messages ORDER BY date DESC");
@@ -90,13 +100,19 @@ app.get("/api/messages", async (req, res) => {
   }
 });
 
-// exemplo de rota admin login simples (pode ser trocada por JWT depois)
+// POST /api/admin/login -> autenticação
 app.post("/api/admin/login", (req, res) => {
   const { email, password } = req.body;
-  // credencial simples por env (produção: trocar para DB + hash)
+
+  if (!process.env.ADMIN_EMAIL || !process.env.ADMIN_PASSWORD) {
+    console.error("⚠️ Variáveis ADMIN_EMAIL/ADMIN_PASSWORD não configuradas!");
+    return res.status(500).json({ success: false, error: "Configuração de admin ausente." });
+  }
+
   if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
     return res.json({ success: true, token: "admin-placeholder-token", user: { email } });
   }
+
   return res.status(401).json({ success: false, error: "Credenciais inválidas." });
 });
 
