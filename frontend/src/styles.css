@@ -1,0 +1,56 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.site-header {
+  background-color: #0b3d2e;
+  color: white;
+  text-align: center;
+  padding: 15px 10px;
+}
+
+.logo {
+  width: 80px;
+  margin-bottom: 5px;
+}
+
+.header-text {
+  margin-bottom: 10px;
+}
+
+.tagline {
+  font-style: italic;
+  margin-top: -5px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.button-link {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 10px 18px;
+  border-radius: 8px;
+}
+
+.whatsapp {
+  background-color: #25D366;
+}
+
+.admin {
+  background-color: #14432a;
+}
+
+.site-footer {
+  margin-top: 30px;
+  padding: 15px;
+  text-align: center;
+  background-color: #0b3d2e;
+  color: white;
+}
