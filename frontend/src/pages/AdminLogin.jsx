@@ -1,42 +1,67 @@
 import React, { useState } from "react";
-import axios from "axios";
 
-const API_ROOT = import.meta.env.VITE_API_URL || "https://viveiro-comurg-backend-yjsj.onrender.com";
-
-export default function AdminLogin() {
-  const [form, setForm] = useState({ email: "", password: "" });
+const AdminLogin = () => {
+  const [email, setEmail] = useState("syllfarney@hotmail.com");
+  const [senha, setSenha] = useState("123456");
   const [status, setStatus] = useState("");
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const API_ROOT = "https://viveiro-comurg-backend-yjsj.onrender.com";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Autenticando...");
+
     try {
-      const res = await axios.post(`${API_ROOT}/api/admin/login`, form);
-      if (res.data.success) {
-        setStatus("✅ Acesso permitido");
-        localStorage.setItem("admin_token", res.data.token || "token");
-        // redirecionar para painel se existir
-        window.location.href = "/admin/dashboard";
-      } else {
-        setStatus("❌ Credenciais inválidas");
+      const response = await fetch(`${API_ROOT}/api/admin/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, senha }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro de autenticação");
       }
-    } catch (err) {
-      console.error(err);
-      setStatus("❌ Erro de autenticação");
+
+      const data = await response.json();
+
+      if (data && data.token) {
+        localStorage.setItem("token", data.token);
+        setStatus("✅ Login bem-sucedido!");
+      } else {
+        setStatus("Credenciais inválidas. Tente novamente.");
+      }
+    } catch (error) {
+      console.error("Erro ao autenticar:", error);
+      setStatus("Erro de conexão com o servidor. Tente novamente.");
     }
   };
 
   return (
-    <section className="admin-login">
-      <h2>Área Administrativa</h2>
-      <form onSubmit={handleSubmit} className="form">
-        <input name="email" placeholder="E-mail" value={form.email} onChange={handleChange} required />
-        <input name="password" type="password" placeholder="Senha" value={form.password} onChange={handleChange} required />
-        <button type="submit" className="btn-send">Entrar</button>
-      </form>
-      {status && <p className="status">{status}</p>}
-    </section>
+    <form onSubmit={handleSubmit}>
+      <div className="form-group">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="E-mail"
+          required
+        />
+      </div>
+      <div className="form-group">
+        <input
+          type="password"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+          placeholder="Senha"
+          required
+        />
+      </div>
+      <button type="submit">Entrar</button>
+      {status && <p className="status-message">{status}</p>}
+    </form>
   );
-}
+};
+
+export default AdminLogin;
