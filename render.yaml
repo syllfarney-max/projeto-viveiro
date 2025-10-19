@@ -19,24 +19,26 @@ services:
         value: 5432
       - key: CONTACT_EMAIL
         value: syllfarney@hotmail.com
-      - key: SENDGRID_API_KEY
-        sync: false
       - key: SENDGRID_FROM
         value: noreply@viveirocomurg.com.br
       - key: ADMIN_EMAIL
         value: syllfarney@hotmail.com
-      - key: ADMIN_PASSWORD
+      - key: PORT
+        value: 10000
+      - key: SENDGRID_API_KEY
         sync: false
       - key: JWT_SECRET
         sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
 
-  - type: static
+  - type: web
     name: viveiro-comurg-frontend
-    env: static
+    env: node
     plan: free
     rootDir: frontend
     buildCommand: "npm install && npm run build"
-    staticPublishPath: dist
+    startCommand: "npx serve -s dist -l $PORT"
     envVars:
       - key: VITE_API_URL
         value: "https://viveiro-comurg-backend-yjsj.onrender.com"
