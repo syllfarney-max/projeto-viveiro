@@ -21,26 +21,26 @@ const ContactForm = () => {
 
       const result = await response.json();
 
-      if (result.success) {
-        setStatus("Mensagem enviada com sucesso!");
+      if (response.ok && result.success) {
+        setStatus("✅ Mensagem enviada com sucesso!");
         setFormData({ name: "", email: "", message: "" });
       } else {
-        setStatus("Erro ao enviar mensagem. Tente novamente.");
+        setStatus("❌ Erro ao enviar mensagem. Tente novamente.");
       }
     } catch (error) {
-      console.error("Erro de conexão com o servidor:", error);
-      setStatus("Erro de conexão com o servidor.");
+      console.error("Erro ao conectar com o servidor:", error);
+      setStatus("❌ Erro de conexão com o servidor.");
     }
   };
 
   return (
-    <div className="contact-form-container">
-      <h2>Entre em Contato</h2>
-      <form onSubmit={handleSubmit} className="contact-form">
+    <section id="contato" className="contact-section">
+      <h2 className="contact-title">Entre em Contato</h2>
+      <form className="contact-form" onSubmit={handleSubmit}>
         <input
           type="text"
           name="name"
-          placeholder="Nome"
+          placeholder="Seu nome"
           value={formData.name}
           onChange={handleChange}
           required
@@ -48,23 +48,22 @@ const ContactForm = () => {
         <input
           type="email"
           name="email"
-          placeholder="E-mail"
+          placeholder="Seu e-mail"
           value={formData.email}
           onChange={handleChange}
           required
         />
         <textarea
           name="message"
-          placeholder="Mensagem"
-          rows="4"
+          placeholder="Escreva sua mensagem..."
           value={formData.message}
           onChange={handleChange}
           required
         />
-        <button type="submit">Enviar</button>
+        <button type="submit">Enviar Mensagem</button>
       </form>
       {status && <p className="status-message">{status}</p>}
-    </div>
+    </section>
   );
 };
 
