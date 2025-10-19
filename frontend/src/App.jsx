@@ -1,34 +1,49 @@
-import { useState } from 'react';
-import axios from 'axios';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import ContactForm from "./components/ContactForm";
+import AdminLogin from "./pages/AdminLogin";
+import "./styles.css";
 
-function App() {
-  const [form, setForm] = useState({ nome: '', email: '', mensagem: '' });
-  const [status, setStatus] = useState('');
-
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await axios.post('https://viveiro-comurg-backend-yjsj.onrender.com/api/contato', form);
-      setStatus(res.data.mensagem || 'Mensagem enviada!');
-    } catch (err) {
-      setStatus('Erro ao enviar.');
-    }
-  };
-
+export default function App() {
   return (
-    <div style={{ fontFamily: 'Arial', margin: '2rem' }}>
-      <h1>Viveiro COMURG</h1>
-      <form onSubmit={handleSubmit}>
-        <input name="nome" placeholder="Nome" value={form.nome} onChange={handleChange} /><br />
-        <input name="email" placeholder="Email" value={form.email} onChange={handleChange} /><br />
-        <textarea name="mensagem" placeholder="Mensagem" value={form.mensagem} onChange={handleChange} /><br />
-        <button type="submit">Enviar</button>
-      </form>
-      <p>{status}</p>
-    </div>
+    <Router>
+      <div className="page">
+        <header className="site-header">
+          <img src="/comurg.jpg" alt="Logo Comurg" className="logo" />
+          <div className="header-text">
+            <h1>Viveiros ® Comurg</h1>
+            <p className="tagline">Sustentabilidade e Meio Ambiente</p>
+          </div>
+
+          <div className="button-container">
+            <a href="https://wa.me/5562999569870" className="button-link whatsapp" target="_blank">
+              WhatsApp
+            </a>
+            <Link to="/admin" className="button-link admin">Área Administrativa</Link>
+          </div>
+        </header>
+
+        <main className="container">
+          <section className="hero">
+            <h2>Produção de mudas e soluções ambientais</h2>
+            <p>Mudas para paisagismo, recuperação ambiental e projetos de reflorestamento.</p>
+          </section>
+
+          <section className="contact">
+            <h3>Fale conosco</h3>
+            <ContactForm />
+          </section>
+        </main>
+
+        <footer className="site-footer">
+          © {new Date().getFullYear()} Viveiros ® Comurg — contato:{" "}
+          <a href="mailto:syllfarney@hotmail.com">syllfarney@hotmail.com</a>
+        </footer>
+
+        <Routes>
+          <Route path="/admin" element={<AdminLogin />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
-
-export default App;
