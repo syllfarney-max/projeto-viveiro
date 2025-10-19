@@ -1,56 +1,53 @@
+:root {
+  --green-dark: #0b3d2e;
+  --green-mid: #14432a;
+  --green-light: #25D366;
+  --bg: #f4f4f4;
+  --text: #1f3d2b;
+}
+
+* { box-sizing: border-box; }
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: var(--bg);
+  color: var(--text);
 }
 
+/* Header */
 .site-header {
-  background-color: #0b3d2e;
-  color: white;
-  text-align: center;
-  padding: 15px 10px;
-}
-
-.logo {
-  width: 80px;
-  margin-bottom: 5px;
-}
-
-.header-text {
-  margin-bottom: 10px;
-}
-
-.tagline {
-  font-style: italic;
-  margin-top: -5px;
-}
-
-.button-container {
   display: flex;
-  justify-content: center;
-  gap: 15px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 12px 18px;
+  background: var(--green-dark);
+  color: #fff;
 }
+.header-left { display:flex; align-items:center; gap:12px; }
+.logo { width:64px; height:auto; border-radius:6px; }
+.header-text h1 { margin:0; font-size:18px; }
+.header-text .tagline { margin:0; font-size:12px; opacity:0.9; }
 
-.button-link {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 10px 18px;
-  border-radius: 8px;
-}
+/* Buttons */
+.header-right { display:flex; gap:10px; }
+.button-link { padding:8px 14px; border-radius:8px; font-weight:600; text-decoration:none; color:white; }
+.button-link.whatsapp { background: var(--green-light); color: #fff; }
+.button-link.admin, .button-link.admin-btn { background: var(--green-mid); }
 
-.whatsapp {
-  background-color: #25D366;
+/* main / contact */
+.main-area { padding: 28px 16px; min-height: calc(100vh - 140px); display:flex; justify-content:center; }
+.contact-section { width:100%; max-width:720px; background:#fff; padding:20px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
+.contact-section h2 { margin-top:0; color:var(--green-dark); }
+.form { display:flex; flex-direction:column; gap:10px; }
+.form input, .form textarea {
+  padding:10px; border-radius:8px; border:1px solid #d0d0d0; font-size:14px; width:100%;
 }
+.btn-send { background:var(--green-dark); color:white; padding:10px; border-radius:8px; border:none; cursor:pointer; font-weight:700; }
+.status { margin-top:10px; color:#333; }
 
-.admin {
-  background-color: #14432a;
-}
+/* admin login */
+.admin-login { width:100%; max-width:420px; margin:40px auto; background:#fff; padding:20px; border-radius:10px; box-shadow:0 6px 18px rgba(0,0,0,0.06); }
 
-.site-footer {
-  margin-top: 30px;
-  padding: 15px;
-  text-align: center;
-  background-color: #0b3d2e;
-  color: white;
-}
+/* footer */
+footer { background: var(--green-dark); color: #fff; padding:12px; text-align:center; }
