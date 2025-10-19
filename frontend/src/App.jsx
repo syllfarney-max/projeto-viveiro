@@ -1,49 +1,43 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Header from "./components/Header";
 import ContactForm from "./components/ContactForm";
 import AdminLogin from "./pages/AdminLogin";
-import "./styles.css";
 
 export default function App() {
   return (
     <Router>
-      <div className="page">
-        <header className="site-header">
-          <img src="/comurg.jpg" alt="Logo Comurg" className="logo" />
-          <div className="header-text">
-            <h1>Viveiros ® Comurg</h1>
-            <p className="tagline">Sustentabilidade e Meio Ambiente</p>
-          </div>
+      <Header />
 
-          <div className="button-container">
-            <a href="https://wa.me/5562999569870" className="button-link whatsapp" target="_blank">
-              WhatsApp
-            </a>
-            <Link to="/admin" className="button-link admin">Área Administrativa</Link>
-          </div>
-        </header>
-
-        <main className="container">
-          <section className="hero">
-            <h2>Produção de mudas e soluções ambientais</h2>
-            <p>Mudas para paisagismo, recuperação ambiental e projetos de reflorestamento.</p>
-          </section>
-
-          <section className="contact">
-            <h3>Fale conosco</h3>
-            <ContactForm />
-          </section>
-        </main>
-
-        <footer className="site-footer">
-          © {new Date().getFullYear()} Viveiros ® Comurg — contato:{" "}
-          <a href="mailto:syllfarney@hotmail.com">syllfarney@hotmail.com</a>
-        </footer>
-
+      <main className="main-container">
         <Routes>
+          <Route
+            path="/"
+            element={
+              <div className="home">
+                <section id="sobre">
+                  <h2>🌱 Sobre o Viveiro COMURG</h2>
+                  <p>
+                    O Viveiro COMURG é responsável pela produção e distribuição de mudas,
+                    contribuindo para o reflorestamento urbano e a preservação ambiental.
+                  </p>
+                </section>
+
+                <section id="contato">
+                  <h2>📬 Entre em Contato</h2>
+                  <ContactForm />
+                </section>
+              </div>
+            }
+          />
+
           <Route path="/admin" element={<AdminLogin />} />
         </Routes>
-      </div>
+      </main>
+
+      <footer className="footer">
+        <p>© {new Date().getFullYear()} Viveiro COMURG — Todos os direitos reservados.</p>
+      </footer>
     </Router>
   );
 }
