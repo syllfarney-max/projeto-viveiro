@@ -1,0 +1,2 @@
+- Configure env vars no Render: DB_HOST, DB_NAME, DB_USER, DB_PASSWORD, DB_PORT, CONTACT_EMAIL, SENDGRID_API_KEY, SENDGRID_FROM, ADMIN_EMAIL, ADMIN_PASSWORD, JWT_SECRET
+- O endpoint para o frontend usar é: https://<BACKEND_URL>/api/send
