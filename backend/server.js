@@ -1,77 +1,103 @@
+// server.js
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import pkg from "pg";
+import db from "./db.js";
+import path from "path";
+import { fileURLToPath } from "url";
 import nodemailer from "nodemailer";
 
 dotenv.config();
-const { Pool } = pkg;
-
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// PostgreSQL
-const pool = new Pool({
-  host: process.env.DB_HOST,
-  database: process.env.DB_NAME,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT || 5432,
-  ssl: { rejectUnauthorized: false },
-});
-
-// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// ✅ Rota principal
-app.get("/", (req, res) => {
-  res.send("🌱 Backend do Viveiros Comurg rodando normalmente!");
-});
+// health
+app.get("/", (req, res) => res.send("🌱 Backend do Viveiros Comurg rodando!"));
 
-// ✅ Envio de mensagens
+// -- cria tabela simples messages se não existir (útil em deploy inicial)
+async function ensureTables() {
+  try {
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS messages (
+        id SERIAL PRIMARY KEY,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL,
+        message TEXT NOT NULL,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+    `);
+  } catch (err) {
+    console.error("Erro ao criar tabela messages:", err);
+  }
+}
+ensureTables();
+
+// POST /api/send  -> recebe form e salva + opcional envia e-mail via SendGrid (nodemailer com SendGrid)
 app.post("/api/send", async (req, res) => {
   const { name, email, message } = req.body;
-  if (!name || !email || !message)
+  if (!name || !email || !message) {
     return res.status(400).json({ success: false, error: "Campos obrigatórios faltando." });
+  }
 
   try {
-    const result = await pool.query(
-      "INSERT INTO messages (name, email, message, date) VALUES ($1, $2, $3, NOW()) RETURNING *",
+    const insert = await db.query(
+      "INSERT INTO messages (name, email, message) VALUES ($1,$2,$3) RETURNING *",
       [name, email, message]
     );
 
-    // Envio de e-mail
+    // Envio de e-mail (via Nodemailer + SendGrid SMTP or 'SendGrid' if configured)
     if (process.env.SENDGRID_API_KEY) {
-      const transporter = nodemailer.createTransport({
-        service: "SendGrid",
-        auth: { user: "apikey", pass: process.env.SENDGRID_API_KEY },
-      });
+      try {
+        const transporter = nodemailer.createTransport({
+          service: "SendGrid",
+          auth: {
+            user: "apikey",
+            pass: process.env.SENDGRID_API_KEY,
+          },
+        });
 
-      await transporter.sendMail({
-        from: process.env.SENDGRID_FROM || "noreply@viveirocomurg.com.br",
-        to: process.env.CONTACT_EMAIL || "syllfarney@hotmail.com",
-        subject: "🌿 Nova mensagem — Viveiros Comurg",
-        text: `Nome: ${name}\nEmail: ${email}\nMensagem: ${message}`,
-      });
+        await transporter.sendMail({
+          from: process.env.SENDGRID_FROM || process.env.CONTACT_EMAIL,
+          to: process.env.CONTACT_EMAIL,
+          subject: `🌿 Nova mensagem do site - ${name}`,
+          text: `Nome: ${name}\nEmail: ${email}\n\n${message}`,
+          html: `<p><strong>Nome:</strong> ${name}</p><p><strong>Email:</strong> ${email}</p><p>${message}</p>`,
+        });
+      } catch (mailErr) {
+        console.error("Erro no envio de e-mail (continuando):", mailErr?.response ?? mailErr);
+        // não falhar a requisição apenas por falha no e-mail
+      }
     }
 
     res.json({ success: true, message: "Mensagem enviada com sucesso!" });
   } catch (err) {
-    console.error("❌ Erro:", err);
+    console.error("Erro ao salvar mensagem:", err);
     res.status(500).json({ success: false, error: "Erro interno no servidor." });
   }
 });
 
-// ✅ Lista de mensagens (admin)
+// GET /api/messages -> retorna lista (admin)
 app.get("/api/messages", async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM messages ORDER BY date DESC");
+    const result = await db.query("SELECT * FROM messages ORDER BY date DESC");
     res.json(result.rows);
   } catch (err) {
-    console.error("❌ Erro ao buscar mensagens:", err);
+    console.error("Erro ao buscar mensagens:", err);
     res.status(500).json({ success: false, error: "Erro ao buscar mensagens." });
   }
+});
+
+// exemplo de rota admin login simples (pode ser trocada por JWT depois)
+app.post("/api/admin/login", (req, res) => {
+  const { email, password } = req.body;
+  // credencial simples por env (produção: trocar para DB + hash)
+  if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
+    return res.json({ success: true, token: "admin-placeholder-token", user: { email } });
+  }
+  return res.status(401).json({ success: false, error: "Credenciais inválidas." });
 });
 
 app.listen(PORT, () => console.log(`🚀 Backend rodando na porta ${PORT}`));
