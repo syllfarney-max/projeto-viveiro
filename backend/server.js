@@ -9,31 +9,36 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 10000;
 
-// ✅ Domínios permitidos (corrigido: endereço do frontend exato)
+// 🔹 Coloque aqui SEU domínio exato do frontend (Render)
 const allowedOrigins = [
-  "https://viveiro-comurg-frontend-56v2.onrender.com", // endereço certo do frontend Render
-  "http://localhost:5173", // para desenvolvimento local
+  "https://viveiro-comurg-frontend-56v2.onrender.com",
+  "http://localhost:5173",
 ];
 
-// ✅ Middleware CORS com OPTIONS liberado globalmente
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("CORS bloqueado para essa origem"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-    credentials: true,
-  })
-);
+// ✅ O CORS precisa ser aplicado antes de qualquer outro middleware
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
 
-// ✅ Importante — garante que o preflight OPTIONS funcione
-app.options("*", cors());
+  // Responde imediatamente às requisições OPTIONS (preflight)
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
+// ✅ Só depois aplicamos o JSON parser
 app.use(express.json());
 
 // rota health check
@@ -60,9 +65,10 @@ ensureTables();
 app.post("/api/send", async (req, res) => {
   const { name, email, message } = req.body;
   if (!name || !email || !message) {
-    return res
-      .status(400)
-      .json({ success: false, error: "Campos obrigatórios faltando." });
+    return res.status(400).json({
+      success: false,
+      error: "Campos obrigatórios faltando.",
+    });
   }
 
   try {
@@ -96,9 +102,10 @@ app.post("/api/send", async (req, res) => {
     res.json({ success: true, message: "Mensagem enviada com sucesso!" });
   } catch (err) {
     console.error("Erro ao salvar/enviar mensagem:", err);
-    res
-      .status(500)
-      .json({ success: false, error: "Erro interno no servidor." });
+    res.status(500).json({
+      success: false,
+      error: "Erro interno no servidor.",
+    });
   }
 });
 
@@ -139,5 +146,7 @@ app.post("/api/admin/login", (req, res) => {
 });
 
 // 🚀 Inicializa o servidor
-app.listen(PORT, () => console.log(`🚀 Backend rodando na porta ${PORT}`));
+app.listen(PORT, () =>
+  console.log(`🚀 Backend rodando na porta ${PORT}`)
+);
 
