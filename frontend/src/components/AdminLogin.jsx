@@ -1,44 +1,41 @@
+// frontend/src/pages/AdminLogin.jsx
 import React, { useState } from "react";
+import axios from "axios";
+
+const API_ROOT = import.meta.env.VITE_API_URL || "https://viveiro-comurg-backend-yjsj.onrender.com";
 
 export default function AdminLogin() {
+  const [form, setForm] = useState({ email: "", password: "" });
   const [status, setStatus] = useState("");
-  const apiUrl = import.meta.env.VITE_API_URL || "https://viveiro-comurg-backend-yjsj.onrender.com";
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Autenticando...");
-    const email = e.target.email.value;
-    const password = e.target.password.value;
-
     try {
-      const res = await fetch(`${apiUrl}/api/admin/login`, {
-        method: "POST",
+      const res = await axios.post(`${API_ROOT}/api/admin/login`, form, {
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
       });
-      const result = await res.json();
-      if (res.ok && result.success) {
+      if (res.data?.success) {
         setStatus("✅ Acesso permitido");
-        localStorage.setItem("admin_token", result.token || "token");
+        localStorage.setItem("admin_token", res.data.token || "token");
         window.location.href = "/admin/dashboard";
       } else {
-        setStatus("❌ Credenciais inválidas. Tente novamente.");
+        setStatus("❌ Credenciais inválidas");
       }
     } catch (err) {
       console.error("Erro ao autenticar:", err);
-      setStatus("❌ Erro de conexão com o servidor.");
+      setStatus("❌ Erro de autenticação");
     }
   };
 
   return (
-    <section className="admin-login">
-      <h2>Área Administrativa</h2>
-      <form onSubmit={handleSubmit} className="form">
-        <input name="email" placeholder="E-mail" required />
-        <input name="password" type="password" placeholder="Senha" required />
-        <button type="submit" className="btn-send">Entrar</button>
-      </form>
+    <form onSubmit={handleSubmit} className="form">
+      <input name="email" placeholder="E-mail" value={form.email} onChange={handleChange} required />
+      <input name="password" type="password" placeholder="Senha" value={form.password} onChange={handleChange} required />
+      <button type="submit">Entrar</button>
       {status && <p className="status">{status}</p>}
-    </section>
+    </form>
   );
 }
