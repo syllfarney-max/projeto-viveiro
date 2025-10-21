@@ -6,15 +6,12 @@ services:
     buildCommand: "npm install"
     startCommand: "npm start"
     envVars:
-      - key: ADMIN_EMAIL
+      - key: DATABASE_URL
         sync: false
-      - key: ADMIN_PASSWORD
-        sync: false
-      - key: ALLOWED_ORIGINS
-        value: "https://viveiro-comurg-frontend-56v2.onrender.com"
 
-  - type: static
+  - type: web
     name: viveiro-comurg-frontend
+    env: static
     rootDir: frontend
     buildCommand: "npm install && npm run build"
     publishPath: dist
