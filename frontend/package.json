@@ -1,0 +1,16 @@
+{
+  "name": "viveiro-comurg-frontend",
+  "version": "1.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "axios": "^1.6.2",
+    "react-router-dom": "^6.22.3"
+  }
+}
