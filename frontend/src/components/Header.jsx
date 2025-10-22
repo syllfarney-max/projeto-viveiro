@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// Se desejar usar imagem, coloque em frontend/public/comurg.jpg e use <img src="/comurg.jpg" ... />
+
 export default function Header() {
   const navigate = useNavigate();
 
@@ -34,4 +34,3 @@ export default function Header() {
     </header>
   );
 }
-
